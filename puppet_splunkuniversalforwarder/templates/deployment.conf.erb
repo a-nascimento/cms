@@ -1,0 +1,9 @@
+# File managed by puppet!
+[deployment-client]
+# Set the phoneHome at the end of the PS engagement
+# 10 minutes
+phoneHomeIntervalInSecs = <%= @phonehome %>
+
+[target-broker:deploymentServer]
+# Change the targetUri
+targetUri= <%= @deployserver %>
