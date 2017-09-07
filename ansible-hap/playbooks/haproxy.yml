@@ -1,0 +1,9 @@
+---
+- hosts: haproxy
+  become: yes
+  become_user: root
+  become_method: sudo
+  connection: ssh
+#  remote_user: root
+  roles: [ 'haproxy' ]
+

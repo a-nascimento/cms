@@ -1,0 +1,15 @@
+[haproxy:children]
+dev
+qa
+prod
+
+[dev]
+ctdhapidk5mt01.surveysampling.com
+
+[qa]
+ctqhaproxy01.surveysampling.com
+ctqhapmobile01.surveysampling.com
+
+[prod]
+ctphapedk5mt01.surveysampling.com
+ctphapmobile01.surveysampling.com

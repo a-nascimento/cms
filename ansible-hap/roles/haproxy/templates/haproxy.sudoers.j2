@@ -1,0 +1,5 @@
+{% if haproxy_sudoers_d is defined %}
+{%   for x in haproxy_sudoers_d %}
+{{ haproxy_operator }}		ALL=NOPASSWD:{{ x }}
+{%   endfor %}
+{% endif %}

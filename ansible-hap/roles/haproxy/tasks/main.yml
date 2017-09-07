@@ -1,0 +1,58 @@
+---
+- name: assert | {{ haproxy_operator }}
+  tags: haproxy
+  assert:
+    that: 
+      - haproxy_operator is defined
+
+- name: yum | {{ item }}
+  tags: haproxy
+  yum:
+    name={{ item }}
+    state=latest
+    update_cache=yes
+  register: haproxy_yum
+#  with_items: [ 'haproxy', 'hatable', 'hatop', 'socat' ]
+  with_items: [ 'haproxy', 'socat' ]
+
+- block: 
+    - name: service | haproxy
+      service:
+        name=haproxy
+        enabled=yes
+        state=started
+    - name: file | {{ item.dst }}
+      file: 
+        dest={{ item.dst }}
+        owner={{ haproxy_operator }}
+        group={{ haproxy_operator }}
+        mode={{ item.mode }}
+        state={{ item.state }}
+      with_items:
+        - { dst: /etc/haproxy/conf, mode: '0755', state: directory }
+        - { dst: /etc/haproxy/conf/blacklist.txt, mode: '0644', state: touch }
+        - { dst: /etc/haproxy/conf/whitelist.txt, mode: '0644', state: touch }
+    - name: lineinfile | {{ item }}
+      lineinfile:
+        dest=/etc/haproxy/conf/whitelist.txt
+        line={{ item }}
+        state=present
+      with_items: haproxy_whitelist
+      notify:
+        - service | haproxy | reloaded
+    - name: template | {{ item.dst }}
+      template:
+        src={{ item.src }}
+        dest={{ item.dst }}
+        owner=root
+        group=root
+        mode={{ item.mode }}
+      with_items:
+        - { src: haproxy.cfg.j2, dst: /etc/haproxy/haproxy.cfg, mode: '0644' }
+#        - { src: haproxy.sudoers.j2, dst: /etc/sudoers.d/haproxy, mode: '0600' }
+        - { src: haproxy.sysconfig.j2, dst: /etc/sysconfig/haproxy, mode: '0644' }
+      notify:
+        - service | haproxy | reloaded
+  tags: haproxy
+  when: haproxy_yum|success
+

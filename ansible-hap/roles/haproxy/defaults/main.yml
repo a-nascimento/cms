@@ -1,0 +1,39 @@
+---
+haproxy_defaults_log: global
+haproxy_defaults_maxconn: 4096
+haproxy_defaults_mode: http
+haproxy_defaults_option_dontlognull: False
+haproxy_defaults_option_fowardfor: True
+haproxy_defaults_option_http_server_close: True
+haproxy_defaults_option_httplog: True
+haproxy_defaults_option_redispatch: True
+haproxy_defaults_retries: 3
+haproxy_defaults_timeout_check: 10s
+haproxy_defaults_timeout_client: 1m
+haproxy_defaults_timeout_connect: 10s
+haproxy_defaults_timeout_http_keep_alive: 10s
+haproxy_defaults_timeout_http_request: 10s
+haproxy_defaults_timeout_queue: 1m
+haproxy_defaults_timeout_server: 1m
+haproxy_global_chroot: /var/lib/haproxy
+haproxy_global_daemon: True
+haproxy_global_group: haproxy
+haproxy_global_maxconn: 4000
+haproxy_global_pidfile: /var/run/haproxy.pid
+haproxy_global_stats: True
+haproxy_global_syslog_facility: local5
+haproxy_global_user: haproxy
+haproxy_operator: haproxy
+haproxy_sudoers_d:
+  - /etc/init.d/haproxy *
+  - /usr/sbin/hatable *
+  - /usr/sbin/hatop *
+haproxy_sysconfig_options: 
+  - '-f /home/{{ haproxy_operator }}/conf/haproxy.cfg'
+haproxy_whitelist:
+  - 10.0.0.0/8
+  - 172.16.0.0/12
+  - 192.168.0.0/16
+  - 198.232.218.0/24
+  - 198.232.219.0/24
+

@@ -1,0 +1,144 @@
+# This configuration is managed by Ansible
+
+global
+    log         {{ inventory_hostname }} {{ haproxy_global_syslog_facility if haproxy_global_syslog_facility is defined else 'local2' }}
+{% if haproxy_global_chroot is defined %}
+    chroot      {{ haproxy_global_chroot }}
+{% else %}
+    chroot      /var/lib/haproxy
+{% endif %}
+{% if haproxy_global_pidfile is defined %}
+    pidfile     {{ haproxy_global_pidfile }}
+{% else %}
+    pidfile     /var/run/haproxy.pid
+{% endif %}
+{% if haproxy_global_maxconn is defined %}
+    maxconn     {{ haproxy_global_maxconn }}
+{% else %}
+    maxconn     4000
+{% endif %}
+{% if haproxy_global_user is defined %}
+    user        {{ haproxy_global_user }}
+{% else %}
+    user        haproxy
+{% endif %}
+{% if haproxy_global_group is defined %}
+    group       {{ haproxy_global_group }}
+{% else %}
+    group       haproxy
+{% endif %}
+{% if haproxy_global_daemon is defined %}
+{%   if haproxy_global_daemon %}
+    daemon
+{%   endif %}
+{% else %}
+    daemon
+{% endif %}
+{% if haproxy_global_stats is defined %}
+{%   if haproxy_global_stats %}
+    stats       socket /var/lib/haproxy/stats level admin
+{%   endif %}
+{% endif %}
+
+defaults
+{% if haproxy_defaults_mode is defined %}
+    mode                    {{ haproxy_defaults_mode }}
+{% else %}
+    mode                    http
+{% endif %}
+{% if haproxy_defaults_log is defined %}
+    log                     {{ haproxy_defaults_log }}
+{% else %}
+    log                     global
+{% endif %}
+{% if haproxy_defaults_option_httplog is defined %}
+{%   if haproxy_defaults_option_httplog %}
+    option                  httplog
+{%   endif %}
+{% else %}
+    option                  httplog
+{% endif %}
+{% if haproxy_defaults_option_dontlognull is defined %}
+{%   if haproxy_defaults_option_dontlognull %}
+    option                  dontlognull
+{%   endif %}
+{% else %}
+    option                  dontlognull
+{% endif %}
+{% if haproxy_defaults_option_http_server_close is defined %}
+{%   if haproxy_defaults_option_http_server_close %}
+    option http-server-close
+{%   endif %}
+{% else %}
+    option http-server-close
+{% endif %}
+{% if haproxy_defaults_option_forwardfor is defined %}
+{%   if haproxy_defaults_option_forwardfor %}
+    option forwardfor       except 127.0.0.0/8
+{%   endif %}
+{% else %}
+    option forwardfor       except 127.0.0.0/8
+{% endif %}
+{% if haproxy_defaults_option_redispatch is defined %}
+{%   if haproxy_defaults_option_redispatch %}
+    option                  redispatch
+{%   endif %}
+{% else %}
+    option                  redispatch
+{% endif %}
+{% if haproxy_defaults_retries is defined %}
+    retries                 {{ haproxy_defaults_retries }}
+{% else %}
+    retries                 3
+{% endif %}
+{% if haproxy_defaults_timeout_http_request is defined %}
+    timeout http-request    {{ haproxy_defaults_timeout_http_request }}
+{% else %}
+    timeout http-request    10s
+{% endif %}
+{% if haproxy_defaults_timeout_queue is defined %}
+    timeout queue           {{ haproxy_defaults_timeout_queue }}
+{% else %}
+    timeout queue           1m
+{% endif %}
+{% if haproxy_defaults_timeout_connect is defined %}
+    timeout connect         {{ haproxy_defaults_timeout_connect }}
+{% else %}
+    timeout connect         10s
+{% endif %}
+{% if haproxy_defaults_timeout_client is defined %}
+    timeout client          {{ haproxy_defaults_timeout_client }}
+{% else %}
+    timeout client          1m
+{% endif %}
+{% if haproxy_defaults_timeout_server is defined %}
+    timeout server          {{ haproxy_defaults_timeout_server }}
+{% else %}
+    timeout server          1m
+{% endif %}
+{% if haproxy_defaults_timeout_http_keep_alive is defined %}
+    timeout http-keep-alive {{ haproxy_defaults_timeout_http_keep_alive }}
+{% else %}
+    timeout http-keep-alive 10s
+{% endif %}
+{% if haproxy_defaults_timeout_check is defined %}
+    timeout check           {{ haproxy_defaults_timeout_check }}
+{% else %}
+    timeout check           10s
+{% endif %}
+{% if haproxy_defaults_maxconn is defined %}
+    maxconn                 {{ haproxy_defaults_maxconn }}
+{% else %}
+    maxconn                 4096
+{% endif %}
+
+{% if haproxy_global_stats is defined %}
+{%   if haproxy_global_stats %}
+listen stats *:9000
+    stats uri /
+    stats refresh 5s
+    stats show-legends
+{%   endif %}
+{% endif %}
+
+{% include "haproxy_configs/" + inventory_hostname %}

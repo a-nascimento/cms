@@ -1,0 +1,8 @@
+# Add extra options to the haproxy daemon here. This can be useful for
+# specifying multiple configuration files with multiple -f options.
+# See haproxy(1) for a complete list of options.
+{% if haproxy_sysconfig_options is defined %}
+#OPTIONS="{{ haproxy_sysconfig_options|join(' ') }}"
+{% else %}
+OPTIONS=""
+{% endif %}
