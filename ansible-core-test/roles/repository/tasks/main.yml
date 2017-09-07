@@ -1,0 +1,20 @@
+---
+- name: yum | createrepo
+  tags: repository
+  yum:
+    name=createrepo
+    state=present
+  when: httpd_yum|success
+
+- name: template | 00_repository.conf
+  tags: repository
+  template:
+    src=00_repository.conf.j2
+    dest=/etc/httpd/conf.d/00_repository.conf
+    owner=root
+    group=root
+    mode=0644
+  when: httpd_yum|success
+  notify:
+    - service | httpd | restarted 
+

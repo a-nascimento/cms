@@ -1,0 +1,28 @@
+<VirtualHost *:80>
+{% if repository.servername is defined %}
+    ServerName {{ repository.servername }}
+{% endif %}
+{% if repository.serveralias is defined %}
+{%   for serveralias in repository.serveralias %}
+    ServerAlias {{ serveralias }}
+{%   endfor %}
+{% endif %}
+{% if repository.documentroot is defined %}
+    DocumentRoot {{ repository.documentroot }}
+{% endif %}
+{% if repository.servername is defined %}
+    ErrorLog logs/{{ repository.servername }}-error_log
+    CustomLog logs/{{ repository.servername }}-access_log common
+{% endif %}
+{% if repository.documentroot is defined %}
+    <Directory "{{ repository.documentroot }}">
+        Options +FollowSymLinks +Indexes
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+    </Directory>
+    <LocationMatch "^/+$">
+        Options +Indexes
+    </LocationMatch>
+{% endif %}
+</VirtualHost>

@@ -1,0 +1,6 @@
+ilo:
+  monitoring:
+    check_ilo2_health:
+      command: False
+      use: ops-service
+

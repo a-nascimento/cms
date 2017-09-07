@@ -1,0 +1,7 @@
+---
+- name: service | nrpe | restarted
+  tags: nrpe
+  service:
+    name=nrpe
+    state=restarted
+

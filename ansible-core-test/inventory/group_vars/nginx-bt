@@ -1,0 +1,15 @@
+nginx-bt:
+  monitoring:
+    check_health_nginx_bt:
+      command: 'check_http -H localhost -p 80 -u /'
+      plugin: check_nrpe
+      use: core-service
+    check_load_nginx_bt:
+      command: 'check_load -w 1.5,0.8,0.8 -c 2,1,1 -r'
+      plugin: check_nrpe
+      use: core-service
+    check_procs_nginx_bt:
+      command: 'check_procs -c 1: -C nginx'
+      plugin: check_nrpe
+      use: core-service
+

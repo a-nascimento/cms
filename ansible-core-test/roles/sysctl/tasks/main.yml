@@ -1,0 +1,21 @@
+---
+- name: yum | {{ item }}
+  tags: sysctl
+  yum:
+    name={{ item }}
+    state=present
+  register: sysctl_yum
+  with_items:
+    - initscripts
+    - procps
+
+- name: file | sysctl.d | directory
+  tags: sysctl
+  file:
+    path=/etc/sysctl.d
+    state=directory
+    owner=root
+    group=root
+    mode=0644
+  when: sysctl_yum.rc == 0
+

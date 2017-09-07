@@ -1,0 +1,5 @@
+---
+inventory:
+  documentroot: /mnt/vdc/inventory
+  servername: "inventory.utl.{{ local_locality + local_vlan }}.{{ local_domain }}"
+

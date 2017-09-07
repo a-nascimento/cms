@@ -1,0 +1,32 @@
+---
+- name: yum | libcgroup
+  tags: libcgroup
+  yum:
+    name=libcgroup
+    state=present
+  register: libcgroup_yum
+
+- name: template | {{ item }}
+  tags: libcgroup
+  template:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    owner=root
+    group=root
+    mode=0644
+  with_items:
+    - { src: cgconfig.conf.j2, dest: /etc/cgconfig.conf }
+    - { src: cgrules.conf.j2, dest: /etc/cgrules.conf }
+  when: libcgroup_yum.rc == 0
+  notify:
+    - service | libcgroup | restarted
+
+- name: service | {{ item }}
+  tags: libcgroup
+  service:
+    name={{ item }}
+    enabled=yes
+    state=started
+  with_items: [ 'cgconfig', 'cgred' ]
+  when: libcgroup_yum.rc == 0
+

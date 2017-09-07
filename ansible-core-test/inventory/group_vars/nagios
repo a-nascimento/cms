@@ -1,0 +1,15 @@
+nagios:
+  monitoring:
+    check_health_nagios:
+      command: 'check_http -H localhost -p 80 -u /nagios/'
+      plugin: check_nrpe
+      use: ops-service
+    check_load_nagios:
+      command: 'check_load -w 1.5,0.8,0.8 -c 2,1,1 -r'
+      plugin: check_nrpe
+      use: ops-service
+    check_procs_nagios:
+      command: 'check_procs -c 1: -C nagios'
+      plugin: check_nrpe
+      use: ops-service
+

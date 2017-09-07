@@ -1,0 +1,26 @@
+---
+- hosts: all:!localhost
+  become: yes
+  become_user: root
+  connection: ssh
+  remote_user: centos
+  roles:
+    - setenv
+    - dhclient
+    - yum-update
+    - iptables
+    - selinux
+    - openssh-server
+
+- include: common.yml
+
+- hosts: all:!localhost
+  become: no
+  become_user: root
+  connection: ssh
+  remote_user: root
+  tasks:
+    - name: command | reboot
+      command: >
+        reboot
+

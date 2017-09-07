@@ -1,0 +1,18 @@
+---
+- name: yum | nfs-utils
+  yum:
+    name=nfs-utils
+    state=present
+  tags: nfs-utils
+  register: nfs_utils_yum
+
+- name: service | rpcbind
+  service:
+    name=rpcbind
+    enabled=yes
+    state=started
+  tags: nfs-utils
+  when:
+    rpcbind_enable and
+    nfs_utils_yum.rc == 0
+

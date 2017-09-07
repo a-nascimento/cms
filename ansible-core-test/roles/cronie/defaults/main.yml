@@ -1,0 +1,9 @@
+---
+cronie_deny: [ 'debug', 'mongod', 'mysql', 'readonly' ]
+cronie_jobs:
+  - dest: /etc/cron.d/ansible
+    jobs:
+      - interval: '0 1-23/2 * * 1-5'
+        owner: root
+        job: 'sleep $((RANDOM\%3600)); [ -f /usr/local/etc/ansible/auth.yml ] && /usr/bin/ansible-playbook /usr/local/etc/ansible/auth.yml >/dev/null'
+

@@ -1,0 +1,7 @@
+---
+- name: service | gmetad | restarted
+  tags: ganglia-gmetad
+  service:
+    name=gmetad
+    state=restarted
+

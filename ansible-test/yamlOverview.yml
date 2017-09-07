@@ -1,0 +1,27 @@
+---
+#this is a comment
+
+# yaml dictionary - key value pairs ex.
+name: Cheddar Charlie
+occupation: Cheese Tester
+state: Wisconsin
+
+# yaml list
+- gorgonzola
+- brie
+- swiss
+
+# yaml list in ansible
+cheeses:
+  - gorgonzola
+  - brie
+  - swiss
+
+cheeses: ['gorgonzola', 'brie', 'swiss']
+
+# yaml strings
+cheese: "{{MyCheese}}"
+
+
+
+

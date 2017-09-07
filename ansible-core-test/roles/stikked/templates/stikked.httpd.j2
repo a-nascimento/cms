@@ -1,0 +1,14 @@
+{% if stikked.virtualhost is defined %}
+<VirtualHost *:80>
+    ServerName {{ stikked.virtualhost }}
+    DocumentRoot /usr/share/Stikked/htdocs
+    ErrorLog logs/{{ stikked.virtualhost }}-error_log
+    CustomLog logs/{{ stikked.virtualhost }}-access_log common
+    <Directory "/usr/share/Stikked/htdocs">
+        Options +FollowSymLinks
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+    </Directory>
+</VirtualHost>
+{% endif %}

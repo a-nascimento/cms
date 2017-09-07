@@ -1,0 +1,7 @@
+---
+- name: service | rpcbind | restart
+  service:
+    name=rpcbind
+    state=restarted
+  tags: nfs-utils
+

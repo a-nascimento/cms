@@ -1,0 +1,70 @@
+---
+named:
+  acls:
+    - 127.0.0.1
+    - 192.168.0.0/16
+    - 10.0.0.0/8
+  also_notify:
+    - 10.1.104.3
+    - 10.1.106.2
+    - 10.1.106.3
+    - 10.1.108.2
+    - 10.1.108.3
+    - 10.1.109.2
+    - 10.1.109.3
+    - 10.1.112.2
+    - 10.1.112.3
+    - 10.40.70.4
+    - 10.40.70.5
+  forward:
+    - usamp.org:192.168.115.2
+    - webtigo.local:192.168.115.2
+    - 110.168.192.in-addr.arpa:192.168.115.2
+    - 111.168.192.in-addr.arpa:192.168.115.2
+    - 114.168.192.in-addr.arpa:192.168.115.2
+    - 115.168.192.in-addr.arpa:192.168.115.2
+  masters: [ '10.1.104.2', '10.1.104.3' ]
+  rndc_secret: 'l1tBuXxXAB9jba8EFcboqQ=='
+  true_master: ops1.utl.phx304.tools.priv
+  zones:
+    - phxdmz.prod.priv
+    - phx2.prod.priv
+    - phx222.prod.priv
+    - phx3.prod.priv
+    - phx304.tools.priv
+    - phx306.qa.priv
+    - phx308.prod.priv
+    - phx309.corp.priv
+    - phx312.lab.priv
+    - phx4.prod.priv
+    - phx5.prod.priv
+    - phx500.prod.priv
+    - phx6.prod.priv
+    - useast1.prod.priv
+    - phx10.prod.priv
+    - corp.priv
+    - lab.priv
+    - prod.priv
+    - qa.priv
+    - tools.priv
+    - 0.1.10.in-addr.arpa
+    - 0.2.10.in-addr.arpa
+    - 1.1.10.in-addr.arpa
+    - 2.1.10.in-addr.arpa
+    - 5.1.10.in-addr.arpa
+    - 6.1.10.in-addr.arpa
+    - 104.1.10.in-addr.arpa
+    - 106.1.10.in-addr.arpa
+    - 108.1.10.in-addr.arpa
+    - 109.1.10.in-addr.arpa
+    - 112.1.10.in-addr.arpa
+    - 46.31.172.in-addr.arpa
+    - 50.31.172.in-addr.arpa
+    - 128.16.172.in-addr.arpa
+    - 129.16.172.in-addr.arpa
+    - 130.16.172.in-addr.arpa
+    - 1.20.172.in-addr.arpa
+    - 2.20.172.in-addr.arpa
+    - 3.20.172.in-addr.arpa
+    - 70.40.10.in-addr.arpa
+

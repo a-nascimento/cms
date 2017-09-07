@@ -1,0 +1,7 @@
+---
+- name: service | named | restarted
+  tags: bind
+  service:
+    name=named
+    state=restarted
+

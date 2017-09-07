@@ -1,0 +1,5 @@
+---
+tftp_server:
+  disable: False
+  secure: /mnt/vdc/tftpboot
+

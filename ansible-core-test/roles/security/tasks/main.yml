@@ -1,0 +1,45 @@
+---
+- name: mount | proc | hidepid
+  tags: security
+  mount:
+    name=/proc
+    fstype=proc
+    opts=defaults,hidepid={{ security_proc_hidepid }}
+    src=/proc
+    state=present
+  when: security_proc_hidepid is defined
+
+- name: yum | {{ item.package }}
+  tags: security
+  yum:
+    name={{ item.package }}
+    state={{ item.state }}
+  with_items: security
+  when: item.package is defined
+
+- name: file | {{ item.1.path }}
+  tags: security
+  file:
+    path={{ item.1.path }}
+    mode={{ item.1.mode }}
+  with_subelements:
+    - security
+    - permissions
+  when:
+    item.1.path is defined and
+    item.1.mode is defined
+
+- name: command | pwck
+  tags: security
+  command: >
+    pwck -s
+  environment:
+    PATH: /usr/sbin:{{ ansible_env.PATH }}
+
+- name: command | grpck
+  tags: security
+  command: >
+    grpck -s
+  environment:
+    PATH: /usr/sbin:{{ ansible_env.PATH }}
+

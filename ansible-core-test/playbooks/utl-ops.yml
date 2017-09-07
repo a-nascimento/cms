@@ -1,0 +1,22 @@
+---
+- hosts: ~ops[0-9]+?.*
+  become: no
+  become_user: root
+  connection: ssh
+  remote_user: root
+
+  roles:
+    - setenv
+    - bind
+    - inventory
+    - role: repository
+      when: local_env == 'tools'
+    - role: stikked
+      when: local_env == 'tools' 
+    - role: storage
+      when: local_env == 'tools'
+    - role: tftp-server
+      when: local_env == 'tools'
+    - role: squid
+      when: local_env != 'tools'
+    

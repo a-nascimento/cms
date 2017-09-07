@@ -1,0 +1,16 @@
+---
+- name: yum | populate_dev_shm | latest
+  tags: populate_dev_shm
+  yum:
+    name=populate_dev_shm
+    state=latest
+  register: populate_dev_shm_yum
+
+- name: service | populate_dev_shm | started
+  tags: populate_dev_shm
+  service:
+    name=populate_dev_shm
+    enabled=yes
+    state=started
+  when: populate_dev_shm_yum.rc == 0
+

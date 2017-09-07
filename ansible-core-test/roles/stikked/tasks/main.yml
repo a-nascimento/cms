@@ -1,0 +1,32 @@
+---
+- name: yum | {{ item }}
+  tags: stikked
+  yum:
+    name={{ item }}
+    state=latest
+    update_cache=yes
+  register: stikked_yum
+  with_items: [ 'php', 'php-mysql', 'Stikked' ]
+
+- name: template | Stikked.conf
+  tags: stikked
+  template:
+    src=stikked.httpd.j2
+    dest=/etc/httpd/conf.d/Stikked.conf
+    owner=root
+    group=root
+    mode=0644
+  when: stikked_yum|success
+  notify:
+    - service | httpd | restarted
+
+- name: template | stikked.php
+  tags: stikked
+  template:
+    src=stikked.php.j2
+    dest=/usr/share/Stikked/htdocs/application/config/stikked.php
+    owner=root
+    group=root
+    mode=0644
+  when: stikked_yum|success
+

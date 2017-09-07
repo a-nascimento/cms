@@ -1,0 +1,14 @@
+interface "{{ item }}" {
+{% if dhclient.domain_name is defined %}
+    supersede domain-name "{{ dhclient.domain_name|join(' ') }}";
+{% endif %}
+{% if dhclient.domain_name_servers is defined %}
+    supersede domain-name-servers {{ dhclient.domain_name_servers[local_locality + local_vlan]|join(', ') }}, {{ dhclient.domain_name_servers[dhclient.default]|join(', ') }};
+{% endif %}
+{% if dhclient.request is defined %}
+    request {{ dhclient.request|join(', ') }};
+{% endif %}
+{% if dhclient.require is defined %}
+    require {{ dhclient.require|join(', ') }};
+{% endif %}
+}

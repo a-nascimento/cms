@@ -1,0 +1,19 @@
+---
+sudoers_env_keep: [ 'GECOS' ]
+sudoers_requiretty: False
+sudoers:
+  - name: appuser
+    user: appuser
+    ignore: [ 'jump', 'lb', 'log', 'mon', 'ops', 'mgdb', 'mydb', 'myhs' ]
+    commands:
+      - /usr/bin/ansible-playbook -c local -D /usr/local/etc/ansible/*.yml
+  - name: dbuser
+    user: dbuser
+    ignore: [ 'jump', 'lb', 'log', 'mon', 'ops' ]
+    commands:
+      - /usr/bin/ansible-playbook -c local -D /usr/local/etc/ansible/*.yml
+  - name: debug
+    user: debug
+    commands:
+      - /bin/su - appuser
+

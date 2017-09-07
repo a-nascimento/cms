@@ -1,0 +1,54 @@
+---
+security:
+  - package: iputils
+    state: present
+    permissions:
+      - path: /bin/ping
+        mode: 755
+      - path: /bin/ping6
+        mode: 755
+  - package: mlocate
+    state: absent
+    permissions: []
+  - package: passwd
+    state: present
+    permissions:
+      - path: /usr/bin/passwd
+        mode: 755
+  - package: screen
+    state: present
+    permissions:
+      - path: /usr/bin/screen
+        mode: 755
+      - path: /var/run/screen
+        mode: 1777
+  - package: shadow-utils
+    state: present
+    permissions:
+      - path: /usr/bin/chage
+        mode: 755
+      - path: /usr/bin/gpasswd
+        mode: 755
+      - path: /usr/bin/newgrp
+        mode: 755
+  - package: sysvinit-tools
+    state: present
+    permissions:
+      - path: /usr/bin/wall
+        mode: 555
+  - package: util-linux
+    state: present
+    permissions:
+      - path: /bin/mount
+        mode: 755
+      - path: /bin/umount
+        mode: 755
+      - path: /bin/su
+        mode: 755
+      - path: /usr/bin/chfn
+        mode: 711
+      - path: /usr/bin/chsh
+        mode: 711
+      - path: /usr/bin/write
+        mode: 755
+

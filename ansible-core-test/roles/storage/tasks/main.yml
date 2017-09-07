@@ -1,0 +1,11 @@
+---
+- name: mount | {{ item.0.name }}
+  mount: src={{ item.0.name }}:/vol/{{ item.1 }}
+         name=/{{ item.0.name.split('.')[0] }}/{{ item.1 }}
+         fstype=nfs state=mounted
+         opts='ro,rsize=65536,wsize=65536,bg,nfsvers=3,tcp,hard,timeo=50,noacl,noatime,nodiratime'
+  tags: storage
+  with_subelements:
+    - storage_backends
+    - volumes
+

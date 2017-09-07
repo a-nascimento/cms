@@ -1,0 +1,20 @@
+---
+gmond:
+  allow_extra_data: True
+  cleanup_threshold: 300
+  daemonize: True
+  deaf: False
+  debug_level: 0
+  gexec: False
+  host_dmax: 86400
+  host_tmax: 20
+  max_udp_msg_len: 1472
+  mute: False
+  override_hostname: False
+  send_metadata_interval: 60
+  setuid: True
+  udp_send_channel:
+    bind_hostname: True
+    mcast_join: False
+  user: ganglia
+

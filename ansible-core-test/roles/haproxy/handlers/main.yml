@@ -1,0 +1,7 @@
+---
+- name: service | haproxy | reload
+  service:
+    name=haproxy
+    state=reloaded
+  tags: haproxy
+

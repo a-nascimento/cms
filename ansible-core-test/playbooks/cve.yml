@@ -1,0 +1,21 @@
+---
+- hosts: all:!localhost
+  become: no
+  become_user: root
+  connection: ssh
+  remote_user: root
+  tasks:
+    - name: assert | {{ package }}
+      tags: cve
+      assert:
+        that:
+          - package is defined
+
+    - name: yum | {{ item }}
+      tags: cve
+      yum:
+        name={{ item }}
+        state=latest
+        update_cache=yes
+      with_flattened: [ "{{ package }}" ]
+        

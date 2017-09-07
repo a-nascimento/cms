@@ -1,0 +1,13 @@
+---
+haproxy_option_dontlognull: False
+haproxy_syslog_facility: local5
+haproxy_stats: True
+haproxy_whitelist:
+  - 10.0.0.0/8
+  - 172.16.0.0/12
+  - 192.168.0.0/16
+  - 72.44.225.24/29
+  - 72.44.228.176/29
+  - 74.206.97.128/26
+  - 97.65.116.162
+

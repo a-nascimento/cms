@@ -1,0 +1,57 @@
+---
+- name: group | {{ item.key }}
+  tags: [ 'auth', 'openssh-server' ]
+  group:
+    name={{ item.key }}
+    gid={{ item.value.ugid }}
+    state=present
+  with_dict: "{{ authorized_keys.users }}"
+  when: authorized_keys.users is defined
+
+- name: user | {{ item.key }}
+  tags: [ 'auth', 'openssh-server' ]
+  user:
+    name={{ item.key }}
+    uid={{ item.value.ugid }}
+    group={{ item.key }}
+    password={{ item.value.crypt | default('!!') }}
+    comment={{ item.key }}
+    home={{ item.value.home }}
+    shell={{ item.value.shell | default('/bin/bash') }}
+    state=present
+  with_dict: "{{ authorized_keys.users }}"
+  when: authorized_keys.users is defined
+
+- name: file | {{ authorized_keys.dir }}
+  tags: [ 'auth', 'openssh-server' ]
+  file:
+    path={{ authorized_keys.dir }}
+    state=directory
+    mode=0755
+  when: authorized_keys.dir is defined
+
+- name: template | {{ item.key }}
+  tags: [ 'auth', 'openssh-server' ]
+  template:
+    src=authorized_keys.j2 
+    dest={{ authorized_keys.dir }}/{{ item.key }}
+    owner=root
+    group=root
+    mode=0644
+  with_dict: "{{ authorized_keys.users }}"
+  when: authorized_keys.users is defined
+
+- name: copy | {{ item.value.privkey }}
+  tags: [ 'auth', 'openssh-server' ]
+  copy:
+    src={{ item.value.privkey.split(':')[0] + '.key' }}
+    dest={{ item.value.home }}/.ssh/id_{{ item.value.privkey.split(':')[1] }}
+    owner={{ item.key }}
+    group={{ item.key }}
+    mode=0600
+  with_dict: "{{ authorized_keys.users }}"
+  when:
+    - item.value.home is defined
+    - item.value.key is defined
+    - item.value.privkey is defined
+

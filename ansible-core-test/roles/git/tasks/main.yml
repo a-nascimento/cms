@@ -1,0 +1,25 @@
+---
+- name: yum | git
+  tags: git
+  yum:
+    name=git
+    state=present
+  register: git_yum
+
+- name: git | {{ item.key }}
+  tags: git
+  git:
+    repo={{ item.value.user }}@{{ item.value.server }}:{{ item.value.org }}/{{ item.key }}.git
+    dest={{ item.value.dest }}
+    accept_hostkey=yes
+    force=yes
+    update=yes
+  with_dict: "{{ git }}"
+  when:
+    - item.key is defined
+    - item.value.dest is defined
+    - item.value.org is defined
+    - item.value.server is defined
+    - item.value.user is defined
+    - git_yum|success
+

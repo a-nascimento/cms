@@ -1,0 +1,11 @@
+---
+yum_repos:
+  - name: internal-centos-os
+    path: centos/$releasever/os/$basearch
+  - name: internal-centos-updates
+    path: centos/$releasever/updates/$basearch
+  - name: internal-epel
+    path: epel/$releasever/$basearch
+  - name: internal-custom
+    path: internal/$releasever/$basearch
+

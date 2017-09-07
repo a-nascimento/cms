@@ -1,0 +1,21 @@
+---
+- name: yum | pam
+  yum:
+    name=pam
+    state=present
+  tags: pam
+  register: pam_yum
+
+- name: template | limits.d/{{ item.order }}-{{ item.name }}.conf
+  template:
+    src=limits.d.j2
+    dest=/etc/security/limits.d/{{ item.order }}-{{ item.name }}.conf
+    owner=root
+    group=root
+    mode=0644
+  tags: pam
+  with_items: pam_limits
+  when:
+    pam_limits is defined and
+    pam_yum.rc == 0
+

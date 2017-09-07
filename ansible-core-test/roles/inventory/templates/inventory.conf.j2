@@ -1,0 +1,19 @@
+<VirtualHost *:80>
+{% if inventory.servername is defined %}
+    ServerName {{ inventory.servername }}
+{% endif %}
+{% if inventory.documentroot is defined %}
+    DocumentRoot {{ inventory.documentroot }}
+{% endif %}
+{% if inventory.servername is defined %}
+    ErrorLog logs/{{ inventory.servername }}-error_log
+    CustomLog logs/{{ inventory.servername }}-access_log common
+{% endif %}
+{% if inventory.documentroot is defined %}
+    <Directory "{{ inventory.documentroot }}">
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+    </Directory>
+{% endif %}
+</VirtualHost>

@@ -1,0 +1,51 @@
+linux:
+  monitoring:
+    check_disks:
+      command: 'check_disk -w 20% -c 10% -A -l -I /dev/shm -I chroot -R /dev/[a-z]?vd[a-z]'
+      plugin: check_nrpe
+      use: ops-service
+    check_mailq:
+      command: 'check_mailq -w 50 -c 100 -M postfix'
+      plugin: check_nrpe
+      use: ops-service
+    check_ntp:
+      command: 'check_ntp -H localhost'
+      plugin: check_nrpe
+      use: ops-service
+    check_procs_crond:
+      command: 'check_procs -c 1: -C crond'
+      plugin: check_nrpe
+      use: ops-service
+    check_procs_gmond:
+      command: 'check_procs -c 1: -C gmond'
+      plugin: check_nrpe
+      use: ops-service
+    check_procs_master:
+      command: 'check_procs -c 1: -C master'
+      plugin: check_nrpe
+      use: ops-service
+    check_procs_nscd:
+      command: 'check_procs -c 1: -C nscd'
+      plugin: check_nrpe
+      use: ops-service
+    check_procs_ntpd:
+      command: 'check_procs -c 1: -C ntpd'
+      plugin: check_nrpe
+      use: ops-service
+    check_procs_rsyslogd:
+      command: 'check_procs -c 1: -C rsyslogd'
+      plugin: check_nrpe
+      use: ops-service
+    check_procs_sshd:
+      command: 'check_procs -c 1: -C sshd'
+      plugin: check_nrpe
+      use: ops-service
+    check_procs_qmgr:
+      command: 'check_procs -c 1: -C qmgr'
+      plugin: check_nrpe
+      use: ops-service
+    check_swap:
+      command: 'check_swap -w 20 -c 10'
+      plugin: check_nrpe
+      use: ops-service
+

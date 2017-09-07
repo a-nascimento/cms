@@ -1,0 +1,415 @@
+#
+# /etc/nscd.conf
+#
+# An example Name Service Cache config file.  This file is needed by nscd.
+#
+# Legal entries are:
+#
+#	logfile			<file>
+#	debug-level		<level>
+#	threads			<initial #threads to use>
+#	max-threads		<maximum #threads to use>
+#	server-user             <user to run server as instead of root>
+#		server-user is ignored if nscd is started with -S parameters
+#       stat-user               <user who is allowed to request statistics>
+#	reload-count		unlimited|<number>
+#	paranoia		<yes|no>
+#	restart-interval	<time in seconds>
+#
+#       enable-cache		<service> <yes|no>
+#	positive-time-to-live	<service> <time in seconds>
+#	negative-time-to-live   <service> <time in seconds>
+#       suggested-size		<service> <prime number>
+#	check-files		<service> <yes|no>
+#	persistent		<service> <yes|no>
+#	shared			<service> <yes|no>
+#	max-db-size		<service> <number bytes>
+#	auto-propagate		<service> <yes|no>
+#
+# Currently supported cache names (services): passwd, group, hosts, services
+#
+
+
+{% if nscd.logfile is defined %}
+	logfile			{{ nscd.logfile }}
+{% else %}
+#	logfile			/var/log/nscd.log
+{% endif %}
+{% if nscd.threads is defined %}
+	threads			{{ nscd.threads }}
+{% else %}
+#	threads			4
+{% endif %}
+{% if nscd.max_threads is defined %}
+	max-threads		{{ nscd.max_threads }}
+{% else %}
+#	max-threads		32
+{% endif %}
+{% if nscd.server_user is defined %}
+	server-user		{{ nscd.server_user }}
+{% else %}
+	server-user		nscd
+{% endif %}
+{% if nscd.stat_user is defined %}
+	stat-user		{{ nscd.stat_user }}
+{% else %}
+#	stat-user		somebody
+{% endif %}
+{% if nscd.debug_level is defined %}
+	debug-level		{{ nscd.debug_level }}
+{% else %}
+	debug-level		0
+{% endif %}
+{% if nscd.reload_count is defined %}
+	reload-count		{{ nscd.reload_count }}
+{% else %}
+#	reload-count		5
+{% endif %}
+{% if nscd.paranois is defined %}
+{%   if nscd.paranoia %}
+	paranoia		yes
+{%   else %}
+	paranoia		no
+{%   endif %}
+{% else %}
+	paranoia		no
+{% endif %}
+{% if nscd.restart_interval is defined %}
+	restart-interval	3600
+{% else %}
+#	restart-interval	3600
+{% endif %}
+
+{% if nscd.passwd is defined %}
+{%   if nscd.passwd.enable_cache is defined %}
+{%     if nscd.passwd.enable_cache %}
+	enable-cache		passwd		yes
+{%     else %}
+	enable-cache		passwd		no
+{%     endif %}
+{%   else %}
+	enable-cache		passwd		yes
+{%   endif %}
+{%   if nscd.passwd.positive_time_to_live is defined %}
+	positive-time-to-live	passwd		{{ nscd.passwd.positive_time_to_live }}
+{%   else %}
+	positive-time-to-live	passwd		600
+{%   endif %}
+{%   if nscd.passwd.negative_time_to_live is defined %}
+	negative-time-to-live	passwd		{{ nscd.passwd.negative_time_to_live }}
+{%   else %}
+	negative-time-to-live	passwd		20
+{%   endif %}
+{%   if nscd.passwd.suggested_size is defined %}
+	suggested-size		passwd		{{ nscd.passwd.suggested_size }}
+{%   else %}
+	suggested-size		passwd		211
+{%   endif %}
+{%   if nscd.passwd.check_files is defined %}
+{%     if nscd.passwd.check_files %}
+	check-files		passwd		yes
+{%     else %}
+	check-files		passwd		no
+{%     endif %}
+{%   else %}
+	check-files		passwd		yes
+{%   endif %}
+{%   if nscd.passwd.persistent is defined %}
+{%     if nscd.passwd.persistent %}
+	persistent		passwd		yes
+{%     else %}
+	persistent		passwd		no
+{%     endif %}
+{%   else %}
+	persistent		passwd		yes
+{%   endif %}
+{%   if nscd.passwd.shared is defined %}
+{%     if nscd.passwd.shared %}
+	shared			passwd		yes
+{%     else %}
+	shared			passwd		no
+{%     endif %}
+{%   else %}
+	shared			passwd		yes
+{%   endif %}
+{%   if nscd.passwd.max_db_size is defined %}
+	max-db-size		passwd		{{ nscd.passwd.max_db_size }}
+{%   else %}
+	max-db-size		passwd		33554432
+{%   endif %}
+{%   if nscd.passwd.auto_propagate is defined %}
+{%     if nscd.passwd.auto_propagate %}
+	auto-propagate		passwd		yes
+{%     else %}
+	auto-propagate		passwd		no
+{%     endif %}
+{%   else %}
+	auto-propagate		passwd		yes
+{%   endif %}
+{% endif %}
+
+{% if nscd.group is defined %}
+{%   if nscd.group.enable_cache is defined %}
+{%     if nscd.group.enable_cache %}
+	enable-cache		group		yes
+{%     else %}
+	enable-cache		group		no
+{%     endif %}
+{%   else %}
+	enable-cache		group		yes
+{%   endif %}
+{%   if nscd.group.positive_time_to_live is defined %}
+	positive-time-to-live	group		{{ nscd.group.positive_time_to_live }}
+{%   else %}
+	positive-time-to-live	group		600
+{%   endif %}
+{%   if nscd.group.negative_time_to_live is defined %}
+	negative-time-to-live	group		{{ nscd.group.negative_time_to_live }}
+{%   else %}
+	negative-time-to-live	group		20
+{%   endif %}
+{%   if nscd.group.suggested_size is defined %}
+	suggested-size		group		{{ nscd.group.suggested_size }}
+{%   else %}
+	suggested-size		group		211
+{%   endif %}
+{%   if nscd.group.check_files is defined %}
+{%     if nscd.group.check_files %}
+	check-files		group		yes
+{%     else %}
+	check-files		group		no
+{%     endif %}
+{%   else %}
+	check-files		group		yes
+{%   endif %}
+{%   if nscd.group.persistent is defined %}
+{%     if nscd.group.persistent %}
+	persistent		group		yes
+{%     else %}
+	persistent		group		no
+{%     endif %}
+{%   else %}
+	persistent		group		yes
+{%   endif %}
+{%   if nscd.group.shared is defined %}
+{%     if nscd.group.shared %}
+	shared			group		yes
+{%     else %}
+	shared			group		no
+{%     endif %}
+{%   else %}
+	shared			group		yes
+{%   endif %}
+{%   if nscd.group.max_db_size is defined %}
+	max-db-size		group		{{ nscd.group.max_db_size }}
+{%   else %}
+	max-db-size		group		33554432
+{%   endif %}
+{%   if nscd.group.auto_propagate is defined %}
+{%     if nscd.group.auto_propagate %}
+	auto-propagate		group		yes
+{%     else %}
+	auto-propagate		group		no
+{%     endif %}
+{%   else %}
+	auto-propagate		group		yes
+{%   endif %}
+{% endif %}
+
+{% if nscd.hosts is defined %}
+{%   if nscd.hosts.enable_cache is defined %}
+{%     if nscd.hosts.enable_cache %}
+	enable-cache		hosts		yes
+{%     else %}
+	enable-cache		hosts		no
+{%     endif %}
+{%   else %}
+	enable-cache		hosts		yes
+{%   endif %}
+{%   if nscd.hosts.positive_time_to_live is defined %}
+	positive-time-to-live	hosts		{{ nscd.hosts.positive_time_to_live }}
+{%   else %}
+	positive-time-to-live	hosts		600
+{%   endif %}
+{%   if nscd.hosts.negative_time_to_live is defined %}
+	negative-time-to-live	hosts		{{ nscd.hosts.negative_time_to_live }}
+{%   else %}
+	negative-time-to-live	hosts		20
+{%   endif %}
+{%   if nscd.hosts.suggested_size is defined %}
+	suggested-size		hosts		{{ nscd.hosts.suggested_size }}
+{%   else %}
+	suggested-size		hosts		211
+{%   endif %}
+{%   if nscd.hosts.check_files is defined %}
+{%     if nscd.hosts.check_files %}
+	check-files		hosts		yes
+{%     else %}
+	check-files		hosts		no
+{%     endif %}
+{%   else %}
+	check-files		hosts		yes
+{%   endif %}
+{%   if nscd.hosts.persistent is defined %}
+{%     if nscd.hosts.persistent %}
+	persistent		hosts		yes
+{%     else %}
+	persistent		hosts		no
+{%     endif %}
+{%   else %}
+	persistent		hosts		yes
+{%   endif %}
+{%   if nscd.hosts.shared is defined %}
+{%     if nscd.hosts.shared %}
+	shared			hosts		yes
+{%     else %}
+	shared			hosts		no
+{%     endif %}
+{%   else %}
+	shared			hosts		yes
+{%   endif %}
+{%   if nscd.hosts.max_db_size is defined %}
+	max-db-size		hosts		{{ nscd.hosts.max_db_size }}
+{%   else %}
+	max-db-size		hosts		33554432
+{%   endif %}
+{%   if nscd.hosts.auto_propagate is defined %}
+{%     if nscd.hosts.auto_propagate %}
+	auto-propagate		hosts		yes
+{%     else %}
+	auto-propagate		hosts		no
+{%     endif %}
+{%   endif %}
+{% endif %}
+
+{% if nscd.services is defined %}
+{%   if nscd.services.enable_cache is defined %}
+{%     if nscd.services.enable_cache %}
+	enable-cache		services	yes
+{%     else %}
+	enable-cache		services	no
+{%     endif %}
+{%   else %}
+	enable-cache		services	yes
+{%   endif %}
+{%   if nscd.services.positive_time_to_live is defined %}
+	positive-time-to-live	services	{{ nscd.services.positive_time_to_live }}
+{%   else %}
+	positive-time-to-live	services	600
+{%   endif %}
+{%   if nscd.services.negative_time_to_live is defined %}
+	negative-time-to-live	services	{{ nscd.services.negative_time_to_live }}
+{%   else %}
+	negative-time-to-live	services	20
+{%   endif %}
+{%   if nscd.services.suggested_size is defined %}
+	suggested-size		services	{{ nscd.services.suggested_size }}
+{%   else %}
+	suggested-size		services	211
+{%   endif %}
+{%   if nscd.services.check_files is defined %}
+{%     if nscd.services.check_files %}
+	check-files		services	yes
+{%     else %}
+	check-files		services	no
+{%     endif %}
+{%   else %}
+	check-files		services	yes
+{%   endif %}
+{%   if nscd.services.persistent is defined %}
+{%     if nscd.services.persistent %}
+	persistent		services	yes
+{%     else %}
+	persistent		services	no
+{%     endif %}
+{%   else %}
+	persistent		services	yes
+{%   endif %}
+{%   if nscd.services.shared is defined %}
+{%     if nscd.services.shared %}
+	shared			services	yes
+{%     else %}
+	shared			services	no
+{%     endif %}
+{%   else %}
+	shared			services	yes
+{%   endif %}
+{%   if nscd.services.max_db_size is defined %}
+	max-db-size		services	{{ nscd.services.max_db_size }}
+{%   else %}
+	max-db-size		services	33554432
+{%   endif %}
+{%   if nscd.services.auto_propagate is defined %}
+{%     if nscd.services.auto_propagate %}
+	auto-propagate		services	yes
+{%     else %}
+	auto-propagate		services	no
+{%     endif %}
+{%   endif %}
+{% endif %}
+
+{% if nscd.netgroup is defined %}
+{%   if nscd.netgroup.enable_cache is defined %}
+{%     if nscd.netgroup.enable_cache %}
+	enable-cache		netgroup	yes
+{%     else %}
+	enable-cache		netgroup	no
+{%     endif %}
+{%   else %}
+	enable-cache		netgroup	yes
+{%   endif %}
+{%   if nscd.netgroup.positive_time_to_live is defined %}
+	positive-time-to-live	netgroup	{{ nscd.netgroup.positive_time_to_live }}
+{%   else %}
+	positive-time-to-live	netgroup	600
+{%   endif %}
+{%   if nscd.netgroup.negative_time_to_live is defined %}
+	negative-time-to-live	netgroup	{{ nscd.netgroup.negative_time_to_live }}
+{%   else %}
+	negative-time-to-live	netgroup	20
+{%   endif %}
+{%   if nscd.netgroup.suggested_size is defined %}
+	suggested-size		netgroup	{{ nscd.netgroup.suggested_size }}
+{%   else %}
+	suggested-size		netgroup	211
+{%   endif %}
+{%   if nscd.netgroup.check_files is defined %}
+{%     if nscd.netgroup.check_files %}
+	check-files		netgroup	yes
+{%     else %}
+	check-files		netgroup	no
+{%     endif %}
+{%   else %}
+	check-files		netgroup	yes
+{%   endif %}
+{%   if nscd.netgroup.persistent is defined %}
+{%     if nscd.netgroup.persistent %}
+	persistent		netgroup	yes
+{%     else %}
+	persistent		netgroup	no
+{%     endif %}
+{%   else %}
+	persistent		netgroup	yes
+{%   endif %}
+{%   if nscd.netgroup.shared is defined %}
+{%     if nscd.netgroup.shared %}
+	shared			netgroup	yes
+{%     else %}
+	shared			netgroup	no
+{%     endif %}
+{%   else %}
+	shared			netgroup	yes
+{%   endif %}
+{%   if nscd.netgroup.max_db_size is defined %}
+	max-db-size		netgroup	{{ nscd.netgroup.max_db_size }}
+{%   else %}
+	max-db-size		netgroup	33554432
+{%   endif %}
+{%   if nscd.netgroup.auto_propagate is defined %}
+{%     if nscd.netgroup.auto_propagate %}
+	auto-propagate		netgroup	yes
+{%     else %}
+        auto-propagate		netgroup	no
+{%     endif %}
+{%   endif %}
+{% endif %}

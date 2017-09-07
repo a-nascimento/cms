@@ -1,0 +1,11 @@
+---
+snoopy:
+  ld_preload: '/usr/$LIB/libsnoopy.so'
+  message_format:
+    - gecos:%{env:GECOS}
+    - uid:%{uid}
+    - sid:%{sid}
+    - tty:%{tty}
+    - cwd:%{cwd}
+    - filename:%{filename}
+

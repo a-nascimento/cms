@@ -1,0 +1,5 @@
+---
+httpd:
+  servertokens: ProductOnly
+  namevirtualhost: True
+

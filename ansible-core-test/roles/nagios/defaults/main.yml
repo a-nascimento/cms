@@ -1,0 +1,6 @@
+---
+nagios:
+  check_for_updates: 1
+  escalate: [ 'tools', 'prod' ]
+  use_authentication: False
+

@@ -1,0 +1,15 @@
+tomcat-mgs:
+  monitoring:
+    check_health_tomcat_mgs:
+      command: 'check_http -H localhost -p 8080 -u /mgs/'
+      plugin: check_nrpe
+      use: mobile-service
+    check_load_tomcat_mgs:
+      command: 'check_load -w 1.5,0.8,0.8 -c 2,1,1 -r'
+      plugin: check_nrpe
+      use: mobile-service
+    check_procs_tomcat_mgs:
+      command: 'check_procs -c 1: -C java'
+      plugin: check_nrpe
+      use: mobile-service
+

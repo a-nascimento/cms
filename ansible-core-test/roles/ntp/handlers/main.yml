@@ -1,0 +1,7 @@
+---
+- name: service | ntpd | restart
+  service:
+    name=ntpd
+    state=restarted
+  tags: ntp
+

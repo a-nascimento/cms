@@ -1,0 +1,8 @@
+---
+cronie_jobs:
+  - dest: /etc/cron.d/utl-mon
+    jobs:
+      - interval: '0 10,16 * * 1-5'
+        owner: root
+        job: 'cd /etc/ansible && /usr/bin/ansible-playbook -D -i inventory/localhost -i inventory/{{ local_locality + local_vlan }}.{{ local_domain }} playbooks/utl-mon.yml'
+

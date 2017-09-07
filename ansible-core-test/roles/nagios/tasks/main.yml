@@ -1,0 +1,82 @@
+---
+- name: yum | {{ item }}
+  tags: nagios
+  yum:
+    name={{ item }}
+    state=present
+    update_cache=yes
+  register: nagios_yum
+  with_items:
+    - nagios
+    - nagios-plugins-ilo2-health
+    - nagios-plugins-nrpe
+    - nagios-plugins-ping
+    - nagios-plugins-snmp
+    - nagios-plugins-solidfire
+    - nagios-plugins-ssh
+    - pagerduty-nagios-pl
+    - perl-libwww-perl
+    - perl-Crypt-SSLeay
+
+- name: service | nagios
+  tags: nagios
+  service:
+    name=nagios
+    enabled=yes
+    state=started
+  when: nagios_yum.rc == 0
+
+- name: template | {{ item }}
+  tags: nagios
+  template:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    owner=root
+    group=root
+    mode=0664
+  with_items:
+    - { src: cgi.cfg.j2, dest: /etc/nagios/cgi.cfg }
+    - { src: nagios.cfg.j2, dest: /etc/nagios/nagios.cfg }
+    - { src: hosts.cfg.j2, dest: /etc/nagios/conf.d/hosts.cfg }
+    - { src: hostgroups.cfg.j2, dest: /etc/nagios/conf.d/hostgroups.cfg }
+    - { src: services.cfg.j2, dest: /etc/nagios/conf.d/services.cfg }
+    - { src: contacts.cfg.j2, dest: /etc/nagios/objects/contacts.cfg }
+    - { src: templates.cfg.j2, dest: /etc/nagios/objects/templates.cfg }
+  when: nagios_yum.rc == 0
+  notify:
+    - service | nagios | restarted
+
+- name: copy | {{ item }}
+  tags: nagios
+  copy:
+    src={{ item }}.cfg
+    dest=/etc/nagios/objects/{{ item }}.cfg
+    owner=root
+    group=root
+    mode=0664
+  with_items: [ 'commands', 'timeperiods' ]
+  when: nagios_yum.rc == 0
+  notify:
+    - service | nagios | restarted
+
+- name: file | {{ item }} | absent
+  tags: nagios
+  file:
+    path=/etc/nagios/objects/{{ item }}.cfg
+    state=absent
+  with_items: [ 'localhost', 'printer', 'switch', 'windows' ]
+  when: nagios_yum.rc == 0
+  notify:
+    - service | nagios | restarted    
+
+- name: file | nagios.conf
+  template:
+    src=nagios.conf.j2
+    dest=/etc/httpd/conf.d/nagios.conf
+    owner=root
+    group=root
+    mode=0664
+  tags: nagios
+  notify:
+    - service | httpd | restarted
+

@@ -1,0 +1,81 @@
+---
+- name: yum | jenkins
+  tags: jenkins
+  yum: name={{ item }} state=present
+       update_cache=yes
+  with_items:
+    - jenkins
+    - apache-maven
+  register: jenkins_yum
+
+- name: stat | /mnt/vdc
+  tags: jenkins
+  stat:
+    path=/mnt/vdc/
+  register: jenkins_vdc_stat
+  when: jenkins_yum.rc == 0
+
+- name: Set mount directory
+  tags: jenkins
+  set_fact:
+    jenkins_mount_dir: 'vdc'
+  when:
+    ansible_devices.vdc is defined and
+    jenkins_yum.rc == 0
+
+- name: stat | /mnt/xvdb
+  tags: jenkins
+  stat:
+    path=/mnt/xvdb/
+  register: jenkins_xvdb_stat
+  when: jenkins_yum.rc == 0
+
+- name: Set mount directory
+  tags: jenkins
+  set_fact:
+    jenkins_mount_dir: 'xvdb'
+  when:
+    ansible_devices.xvdb is defined and
+    jenkins_yum.rc == 0
+
+- name: file | jenkins | {{ item }}
+  tags: jenkins
+  file:
+    path=/mnt/{{ jenkins_mount_dir }}/jenkins/{{ item }}
+    state=directory
+    owner={{ jenkins_user }}
+    group={{ jenkins_user }}
+    mode=0755
+  with_items:
+    - .m2
+
+- name: template | {{ item.dest }}
+  tags: jenkins
+  template: 
+    src={{ item.src }}
+    dest={{ item.dest }}
+    owner=root
+    group=root
+    mode=0644
+  with_items:
+    - { src: jenkins.sysconfig.j2, dest: /etc/sysconfig/jenkins }
+  when: jenkins_yum.rc == 0
+
+- name: template | {{ item.dest }}
+  tags: jenkins
+  template: 
+    src={{ item.src }}
+    dest={{ item.dest }}
+    owner={{ jenkins_user }}
+    group={{ jenkins_user }}
+    mode=0644
+  with_items:
+    - { src: maven.settings.xml.j2, dest: '/mnt/{{ jenkins_mount_dir }}/jenkins/.m2/settings.xml' }
+  when: jenkins_yum.rc == 0
+
+
+- name: service | jenkins
+  tags: jenkins
+  service: name=jenkins enabled=yes
+  when: jenkins_yum.rc == 0
+

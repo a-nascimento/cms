@@ -1,0 +1,15 @@
+{% if yum_repos is defined %}
+{%   for repo in yum_repos %}
+[{{ repo.name }}]
+name={{ repo.name }}
+baseurl=http://repository.utl.phx304.tools.priv/{{ repo.path }}/
+gpgcheck=0
+enabled=1
+retries=5
+timeout=10
+priority=2
+failovermethod=priority
+metadata_expire=300
+
+{%   endfor %}
+{% endif %}

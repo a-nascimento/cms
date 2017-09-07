@@ -1,0 +1,23 @@
+---
+- hosts: ~gms[0-1]+?\.jenkins.*
+  become: no
+  become_user: root
+  connection: ssh
+  remote_user: root
+  tasks:
+    - name: yum | gearmand
+      tags: gearmand
+      yum:
+        name=gearmand
+        state=present
+        update_cache=yes
+      register: gearmand_yum
+
+    - name: service | gearmand
+      tags: gearmand
+      service:
+        name=gearmand
+        enabled=yes
+        state=started
+      when: gearmand_yum.rc == 0
+

@@ -1,0 +1,12 @@
+{% if item.commands is defined
+   and item.user is defined %}
+{%   for command in item.commands %}
+{%     if item.ignore is defined %}
+{%       if local_class not in item.ignore %}
+{{ item.user }}		ALL=NOPASSWD:{{ command }}
+{%       endif %}
+{%     else %}
+{{ item.user }}		ALL=NOPASSWD:{{ command }}
+{%     endif %}
+{%   endfor %}
+{% endif %}

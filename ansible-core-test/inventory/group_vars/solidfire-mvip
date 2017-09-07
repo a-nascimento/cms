@@ -1,0 +1,6 @@
+solidfire-mvip:
+  monitoring:
+    check_solidfire:
+      command: False
+      use: ops-service
+

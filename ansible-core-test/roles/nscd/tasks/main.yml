@@ -1,0 +1,26 @@
+---
+- name: yum | nscd
+  tags: nscd
+  yum:
+    name=nscd
+    state=latest
+  notify: [ 'service | nscd | restarted' ]
+  register: nscd_yum
+
+- block:
+    - name: template | /etc/nscd.conf
+      template:
+        src=nscd.conf.j2
+        dest=/etc/nscd.conf
+        owner=root
+        group=root
+        mode=0644
+      notify: [ 'service | nscd | restarted' ]
+    - name: service | nscd
+      service:
+        name=nscd
+        enabled=yes
+        state=started
+  tags: nscd
+  when: nscd_yum|success
+

@@ -1,0 +1,15 @@
+mongodb:
+  monitoring:
+    check_disks_mongod:
+      command: 'check_disk -w 20% -c 10% -A -l -I /dev/shm -I chroot -R /dev/[a-z]?vd[a-z]'
+      plugin: check_nrpe
+      use: dba-service
+    check_load_mongod:
+      command: 'check_load -w 1.5,0.8,0.8 -c 2,1,1 -r'
+      plugin: check_nrpe
+      use: dba-service
+    check_procs_mongod:
+      command: 'check_procs -c 1: -C mongod'
+      plugin: check_nrpe
+      use: dba-service
+

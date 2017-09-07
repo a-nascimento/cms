@@ -1,0 +1,28 @@
+---
+- name: yum | ntp
+  yum:
+    name=ntp
+    state=present
+  tags: ntp
+  register: ntp_yum
+
+- name: service | ntpd
+  service:
+    name=ntpd
+    enabled=yes
+    state=started
+  tags: ntp
+  when: ntp_yum.rc == 0
+
+- name: template | ntp.conf
+  template:
+    src=ntp.conf.j2
+    dest=/etc/ntp.conf
+    owner=root
+    group=root
+    mode=0644
+  tags: ntp
+  when: ntp_yum.rc == 0
+  notify:
+    - service | ntpd | restart
+

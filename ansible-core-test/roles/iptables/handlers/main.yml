@@ -1,0 +1,7 @@
+---
+- name: service | iptables | restart
+  tags: iptables
+  service:
+    name=iptables
+    state=restarted
+

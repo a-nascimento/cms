@@ -1,0 +1,18 @@
+netapp:
+  monitoring:
+    check_snmp_cfstate:
+      command: False
+      use: ops-service
+    check_snmp_diskfailedcount:
+      command: False
+      use: ops-service
+    check_snmp_fsmaxusedbytespercent:
+      command: False
+      use: ops-service
+    check_snmp_fsmaxusedinodespercent:
+      command: False
+      use: ops-service
+    check_snmp_sysdescr:
+      command: False
+      use: ops-service
+

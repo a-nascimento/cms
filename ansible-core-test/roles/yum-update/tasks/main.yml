@@ -1,0 +1,14 @@
+---
+- name: yum | update
+  tags: yum-update
+  yum:
+    name=*
+    state=latest
+    update_cache=yes
+  register: yum_update
+
+- name: action | setup
+  tags: yum-update
+  action: setup
+  when: yum_update|changed
+  

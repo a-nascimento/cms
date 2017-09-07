@@ -1,0 +1,4 @@
+---
+ssh_forwardagent: True
+ssh_hashknownhosts: True
+

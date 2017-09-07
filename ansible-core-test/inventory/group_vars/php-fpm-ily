@@ -1,0 +1,7 @@
+php-fpm-ily:
+  monitoring:
+    check_procs_php_fpm_ily:
+      command: 'check_procs -c 1: -C php-fpm'
+      plugin: check_nrpe
+      use: marketing-service
+

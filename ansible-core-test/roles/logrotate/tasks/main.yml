@@ -1,0 +1,18 @@
+---
+- name: yum | logrotate
+  tags: logrotate
+  yum:
+    name=logrotate
+    state=present
+  register: logrotate_yum
+
+- name: template | logrotate.conf
+  tags: logrotate
+  template:
+    src=logrotate.j2
+    dest=/etc/logrotate.conf
+    owner=root
+    group=root
+    mode=0644
+  when: logrotate_yum.rc == 0
+

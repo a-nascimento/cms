@@ -1,0 +1,6 @@
+{% if setup.timezone is defined %}
+ZONE="{{ setup.timezone }}"
+UTC=false
+{% else %}
+ZONE=Etc/UTC
+{% endif %}

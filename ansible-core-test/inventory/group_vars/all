@@ -1,0 +1,23 @@
+nagios_cc:
+  core:
+    email: sample.team@instant.ly
+    pager: fb4cf9cac6f04ec294c25985e3d9a11f
+  dba:
+    email: data.mon@instant.ly
+    pager: 8b3934ada0634c1d98f0104cddd2dc61
+  insights:
+    email: insights.dev@instant.ly
+    pager: f2f4320f7619465491978b72dc5e8146
+  marketing:
+    email: marketingdevteam@instant.ly
+    pager: 2d94cf5b2f454ca0a5085910e6f4bf36
+  mobile:
+    email: mobile-dev@instant.ly
+    pager: bffbb28f6210487b8e2a83645ac42da0
+  ops:
+    email: sys.mon@instant.ly
+    pager: 8d4d6b1da79b4ed588a51fbfe8f84f87 
+  windows:
+    email: it_windows@surveysampling.com
+    pager: 610d7c357f4941ca9305bd56c5b8310f
+

@@ -1,0 +1,55 @@
+---
+- name: yum | {{ item }}
+  tags: haproxy
+  yum:
+    name={{ item }}
+    state=present
+    update_cache=yes
+  register: haproxy_yum
+  with_items: [ 'haproxy', 'hatable', 'hatop', 'socat' ]
+
+- name: service | haproxy
+  tags: haproxy
+  service:
+    name=haproxy
+    enabled=yes
+    state=started
+  when: haproxy_yum|success
+
+- name: file | {{ item.dest }} | {{ item.state }}
+  tags: haproxy
+  file: 
+    dest={{ item.dest }}
+    owner=appuser
+    group=appuser
+    mode={{ item.mode }}
+    state={{ item.state }}
+  with_items:
+    - { dest: /home/appuser/conf, mode: 755, state: directory }
+    - { dest: /home/appuser/conf/blacklist.txt, mode: 644, state: touch }
+    - { dest: /home/appuser/conf/whitelist.txt, mode: 644, state: touch }
+  when: haproxy_yum|success
+
+- name: lineinfile | {{ item }}
+  tags: haproxy
+  lineinfile:
+    dest=/home/appuser/conf/whitelist.txt
+    line={{ item }}
+    state=present
+  with_items: haproxy_whitelist
+  when: haproxy_yum|success
+  notify:
+    - service | haproxy | reload
+
+- name: template | haproxy.cfg
+  tags: haproxy
+  template:
+    src=haproxy.cfg.j2
+    dest=/etc/haproxy/haproxy.cfg
+    owner=root
+    group=root
+    mode=0644
+  when: haproxy_yum|success
+  notify:
+    - service | haproxy | reload
+

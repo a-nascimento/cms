@@ -1,0 +1,6 @@
+---
+repository:
+  documentroot: /mnt/vdc/repository
+  servername: repository.utl.phx304.tools.priv
+  serveralias: [ 'repository.*' ]
+

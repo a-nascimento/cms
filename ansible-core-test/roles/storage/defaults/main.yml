@@ -1,0 +1,13 @@
+---
+storage_backends:
+  - name: fla1.utl.phx5.prod.priv
+    volumes:
+      - vol0
+      - vol_mcp
+      - vol_mhv
+      - vol_tmp
+  - name: fla2.utl.phx5.prod.priv
+    volumes:
+      - vol0
+      - vol_cinder_volumes
+

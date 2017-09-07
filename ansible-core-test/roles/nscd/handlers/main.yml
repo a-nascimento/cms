@@ -1,0 +1,7 @@
+---
+- name: service | nscd | restarted
+  tags: nscd
+  service:
+    name=nscd
+    state=restarted
+

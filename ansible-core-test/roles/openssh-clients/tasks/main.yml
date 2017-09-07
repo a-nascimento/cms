@@ -1,0 +1,22 @@
+---
+- name: yum | openssh-clients
+  yum:
+    name=openssh-clients
+    state=present
+  tags:
+    - openssh-clients
+    - openssh-server
+  register: openssh_clients_yum
+
+- name: template | ssh_config
+  template:
+    src=ssh_config.j2
+    dest=/etc/ssh/ssh_config
+    owner=root
+    group=root
+    mode=0644
+  tags:
+    - openssh-clients
+    - openssh-server
+  when: openssh_clients_yum.rc == 0
+

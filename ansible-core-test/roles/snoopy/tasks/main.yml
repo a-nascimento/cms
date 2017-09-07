@@ -1,0 +1,21 @@
+---
+- name: yum | snoopy
+  tags: snoopy
+  yum:
+    name=snoopy
+    state=latest
+  register: snoopy_yum
+
+- name: template | {{ item }}
+  tags: snoopy
+  template:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    owner=root
+    group=root
+    mode=0644
+  with_items:
+    - { src: snoopy.ini.j2, dest: /etc/snoopy.ini }
+    - { src: ld.so.preload.j2, dest: /etc/ld.so.preload }
+  when: snoopy_yum.rc == 0
+

@@ -1,0 +1,18 @@
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ This network is owned by Survey Sampling International, LLC, and employee use +
++ is governed by applicable Company policies, including but not limited to all  +
++ policies and guidance regarding Use of Company Property and Equipment.  As    +
++ permitted by applicable law, employee activities on the network may be        +
++ monitored, and employees have no reasonable expectation of privacy with       +
++ respect to any use of the Company network for personal or non-job related     +
++ matters.                                                                      +
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+                      This system is managed by Ansible. 
+          
+          OS          : {{ ansible_distribution }} {{ ansible_distribution_version }}
+          Hostname    : {{ inventory_hostname }}
+          IP address  : {{ ansible_default_ipv4.address }}
+          System type : {{ ansible_system }}
+          Virt type   : {{ ansible_virtualization_type }} 
+

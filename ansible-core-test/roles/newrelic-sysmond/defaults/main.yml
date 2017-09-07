@@ -1,0 +1,7 @@
+---
+newrelic:
+  clusters: [ 'prod', 'tools' ]
+  license_key: d2f1ef06b4f79ed76c2bf35e491ff7f9c558d3cd
+  log_file_path: /home/appuser/logs
+  log_limit_in_kbytes: 128000
+

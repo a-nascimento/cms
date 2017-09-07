@@ -1,0 +1,74 @@
+<settings>
+  <servers>
+    <server>
+      <id>nexus</id>
+      <username>admin</username>
+{% if maven_admin_pw is defined %}
+      <password>{{ maven_admin_pw }}</password>
+{% else %}
+      <password>admin</password>
+{% endif %}
+    </server>
+    <server>
+      <id>uSampReleases</id>
+      <username>deployment</username>
+{% if maven_deployment_pw is defined %}
+      <password>{{ maven_deployment_pw }}</password>
+{% else %}
+      <password>deployment</password>
+{% endif %}
+    </server>
+  </servers>
+  <mirrors>
+    <mirror>
+      <!--This sends everything else to /public -->
+      <id>nexus</id>
+      <mirrorOf>*</mirrorOf>
+{% if maven_nexus_url is defined %}
+        <url>{{ maven_nexus_url }}</url>
+{% else %}
+        <url></url>
+{% endif %}
+    </mirror>
+  </mirrors>
+  <pluginGroups>
+{% if maven_plugingroup is defined %}
+    <pluginGroup>{{ maven_plugingroup }}</pluginGroup>
+{% else %}
+    <pluginGroup>default</pluginGroup>
+{% endif %}
+  </pluginGroups>
+  <profiles>
+    <profile>
+      <id>nexus</id>
+      <!--Enable snapshots for the built in central repo to direct -->
+      <!--all requests to nexus a the mirror -->
+      <repositories>
+        <repository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+          </snapshots>
+        </repository>
+      </repositories>
+    <pluginRepositories>
+      <pluginRepository>
+        <id>central</id>
+        <url>http://central</url>
+        <releases><enabled>true</enabled></releases>
+        <snapshots><enabled>true</enabled></snapshots>
+      </pluginRepository>
+    </pluginRepositories>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <!--make the profile active all the time -->
+    <activeProfile>nexus</activeProfile>
+  </activeProfiles>
+</settings>

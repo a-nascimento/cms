@@ -1,0 +1,9 @@
+---
+jenkins_dir: jenkins
+jenkins_user: jenkins
+jenkins_port: 8080
+jenkins_java_options: "-Djava.awt.headless=true -Xms1G -Xmx8G"
+maven_admin_pw: "InstAntly789"
+maven_deployment_pw: "T7lzzlXpWIXvN0SToe"
+maven_nexus_url: "http://nexus.insights.instantly.net:8081/nexus/content/groups/public"
+maven_plugingroup: "com.usamp"

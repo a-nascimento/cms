@@ -1,0 +1,33 @@
+---
+- name: yum | {{ item }}
+  tags: newrelic-sysmond
+  yum:
+    name={{ item }}
+    state=latest
+    update_cache=yes
+  register: newrelic_sysmond_yum
+  with_items: [ 'newrelic-java', 'newrelic-sysmond' ]
+  when: local_env in newrelic.clusters
+
+- block:
+    - name: template | {{ item }}
+      template:
+        src={{ item.src }}
+        dest={{ item.dest }}
+        owner=root
+        group=newrelic
+        mode=0644
+      notify: [ 'service | newrelic-sysmond | restarted' ]
+      with_items:
+        - { src: nrsysmond.cfg.j2, dest: /etc/newrelic/nrsysmond.cfg }
+        - { src: newrelic-java.yml.j2, dest: /etc/newrelic/java/newrelic.yml }
+    - name: service | newrelic-sysmond
+      service:
+        name=newrelic-sysmond
+        enabled=yes
+        state=started
+  tags: newrelic-sysmond
+  when:
+    local_env in newrelic.clusters and
+    newrelic_sysmond_yum|success
+

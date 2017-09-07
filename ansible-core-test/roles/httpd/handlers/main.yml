@@ -1,0 +1,7 @@
+---
+- name: service | httpd | restarted
+  tags: httpd
+  service:
+    name=httpd
+    state=restarted
+

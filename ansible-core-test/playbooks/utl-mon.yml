@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  become: no
+  become_user: root
+  connection: local
+  remote_user: root
+  roles:
+    - setenv
+    - ganglia-gmetad
+    - nagios
+    - security
+

@@ -1,0 +1,46 @@
+---
+authorized_keys:
+  dir: /etc/ssh/authorized_keys
+  users:
+    root:
+      crypt: '$6$iAx53pzm$nftAcdZXlhkITwGHiaZ48XVhSXiI9erdgHg1G/fjSLjrpvaYUX37KnPuP9GU0zG.sXpWmTjfwcU5ZN2FSamX./'
+      ugid: 0
+      home: /root
+      privkey: 'github_ro:rsa'
+      pubkeys: [ 'anascimento', 'aravid', 'blloyd', 'btyner', 'dgoosen', 'gdove', 'klemoine', 'sa_infosec_scan' ]
+    appuser:
+      ugid: 1000
+      home: /home/appuser
+      pubkeys: [ 'jenkins_aws', 'jenkins_metacloud' ]
+    dbuser:
+      ugid: 1001
+      home: /home/dbuser
+      pubkeys: [ 'eczech' ]
+    debug: 
+      ugid: 1002
+      home: /home/debug
+      pubkeys:
+        - cbirajdar
+        - crussell
+        - dscimeca
+        - jaguero
+        - jrodriguez
+        - lschwarz
+        - pbarros
+        - ppappu
+        - rlopez
+        - sborkar
+        - spatail
+        - tzhang
+        - wjo
+    readonly:
+      ugid: 1003
+      home: /home/readonly
+      keyopts:
+        - command="/usr/bin/python"
+        - from="ops1.utl.{{ local_cluster }}.{{ local_domain }},ops2.utl.{{ local_cluster }}.{{ local_domain }}"
+        - no-port-forwarding
+        - no-X11-forwarding
+        - no-agent-forwarding
+        - no-pty
+      pubkeys: [ 'github_ro' ]

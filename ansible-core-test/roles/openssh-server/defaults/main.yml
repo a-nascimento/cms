@@ -1,0 +1,10 @@
+---
+sshd:
+  authorizedkeysfile: /etc/ssh/authorized_keys/%u
+  clientaliveinterval: 300
+  maxsessions: 256
+  permitrootlogin: without-password
+  permituserenvironment: True
+  tcpkeepalive: True
+  x11forwarding: False
+

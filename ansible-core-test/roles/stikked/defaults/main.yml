@@ -1,0 +1,17 @@
+---
+stikked:
+  cron_key: 'rdbL9LUi$OaxF/6n3h1pIhfhTex9fw.'
+  database:
+    hostname: mydb1.utl.phx304.tools.priv
+    database: stikked
+    username: stikked
+    password: b1n5t4n7ly
+  default_expiration: 10080
+  disable_keep_forever: True
+  disable_shorturl: True
+  enable_captcha: False
+  site_name: bInstantly
+  theme: bootstrap
+  unknown_poster: Anonymous
+  virtualhost: paste.tools.priv
+

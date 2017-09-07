@@ -1,0 +1,53 @@
+---
+nscd:
+  group:
+    auto_propagate: True
+    check_files: True
+    enable_cache: True
+    max_db_size: 33554432
+    negative_time_to_live: 60
+    persistent: True
+    positive_time_to_live: 3600
+    shared: True
+    suggested_size: 211
+  hosts:
+    check_files: True
+    enable_cache: True
+    max_db_size: 33554432
+    negative_time_to_live: 20
+    persistent: True
+    positive_time_to_live: 3600
+    shared: True
+    suggested_size: 211
+  netgroup:
+    check_files: True
+    enable_cache: True
+    max_db_size: 33554432
+    negative_time_to_live: 20
+    persistent: True
+    positive_time_to_live: 28800
+    shared: True
+    suggested_size: 211
+  passwd:
+    auto_propagate: True
+    check_files: True
+    enable_cache: True
+    max_db_size: 33554432
+    negative_time_to_live: 20
+    persistent: True
+    positive_time_to_live: 600
+    shared: True
+    suggested_size: 211
+  services:
+    check_files: True
+    enable_cache: True
+    max_db_size: 33554432
+    negative_time_to_live: 20
+    persistent: True
+    positive_time_to_live: 28800
+    shared: True
+    suggested_size: 211
+  debug_level: 0
+  paranoia: False
+  server_user: nscd 
+  

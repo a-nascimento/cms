@@ -1,0 +1,15 @@
+###############################################################################
+# HOSTS.CFG - HOSTS FOR NAGIOS 3.5.1
+###############################################################################
+
+{% if groups['all'] is defined %}
+{%   for host in groups['all']|sort %}
+define host {
+	use		generic-host
+	host_name	{{ host }}
+	alias		{{ host }}
+	address		{{ host }}
+}
+
+{%   endfor %}
+{% endif %}

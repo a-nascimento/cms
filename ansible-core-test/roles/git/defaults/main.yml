@@ -1,0 +1,13 @@
+---
+git:
+  ansible-core:
+    dest: /etc/ansible
+    org: usamp-ops
+    server: github.com
+    user: git
+  ansible-selfservice:
+    dest: /usr/local/etc/ansible
+    org: usamp-ops
+    server: github.com
+    user: git
+

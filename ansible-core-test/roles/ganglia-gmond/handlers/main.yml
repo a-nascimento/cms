@@ -1,0 +1,7 @@
+---
+- name: service | gmond | restarted
+  tags: ganglia-gmond
+  service:
+    name=gmond
+    state=restarted
+

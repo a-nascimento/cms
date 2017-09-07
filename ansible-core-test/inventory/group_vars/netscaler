@@ -1,0 +1,6 @@
+netscaler:
+  monitoring:
+    check_ssh:
+      command: False
+      use: ops-service
+

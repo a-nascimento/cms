@@ -1,0 +1,29 @@
+---
+- hosts: all:!localhost
+  become: no
+  become_user: root
+  connection: ssh
+  remote_user: root
+
+  roles:
+    - setenv
+    - yum-repo
+    - setup
+    - ansible
+    - cronie
+    - ganglia-gmond
+    - libcgroup
+    - logrotate
+    - newrelic-sysmond
+    - nrpe
+    - nscd
+    - ntp
+    - openssh-server
+    - pam
+    - populate_dev_shm
+    - postfix
+    - rsyslog
+    - snoopy
+    - sudo
+    - security
+

@@ -1,0 +1,9 @@
+---
+nrpe:
+  allowed_hosts:
+    - localhost
+    - ::1
+    - mon1.utl.{{ local_locality + local_vlan }}.{{ local_domain }}
+    - mon2.utl.{{ local_locality + local_vlan }}.{{ local_domain }}
+  plugin_dir: /usr/lib64/nagios/plugins
+

@@ -1,0 +1,5 @@
+{% if cronie_deny is defined %}
+{%   for login in cronie_deny %}
+{{ login }}
+{%   endfor %}
+{% endif %}

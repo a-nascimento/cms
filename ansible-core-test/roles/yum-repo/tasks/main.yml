@@ -1,0 +1,32 @@
+---
+- name: template | {{ item.src }}
+  tags: [ 'yum-repo', 'yum-update']
+  template:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    owner=root
+    group=root
+    mode=0644
+  with_items:
+    - { src: CentOS-Base.repo.j2, dest: /etc/yum.repos.d/CentOS-Base.repo }
+    - { src: internal.repo.j2, dest: /etc/yum.repos.d/internal.repo }
+
+- name: yum | yum
+  tags: [ 'yum-repo', 'yum-update']
+  yum:
+    name=yum
+    state=present
+    update_cache=yes
+  register: yum_yum
+
+- name: yum | {{ item }}
+  tags: [ 'yum-repo', 'yum-update']
+  yum:
+    name={{ item }}
+    state=present
+  with_flattened:
+    - [ 'atop', 'htop', 'iftop' ]
+    - [ 'bind-utils', 'mailx', 'nc', 'telnet', 'tree' ]
+    - [ 'lsof', 'strace', 'sysstat', 'tcpdump' ]
+  when: yum_yum.rc == 0
+

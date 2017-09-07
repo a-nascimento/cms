@@ -1,0 +1,14 @@
+---
+rsyslog_dirs:
+  - device: vdc
+    dir: [ 'syslog' ]
+  - device: xvdb
+    dir: [ 'syslog' ]
+rsyslog_loghosts:
+  - log1.utl.{{ local_locality + local_vlan }}.{{ local_domain }}
+  - log2.utl.{{ local_locality + local_vlan }}.{{ local_domain }}
+rsyslog_logrotate: [ '/home/appuser/syslog/*.log' ]
+rsyslog_modload_imudp: True
+rsyslog_queueing: True
+rsyslog_server: log
+

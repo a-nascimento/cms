@@ -1,0 +1,9 @@
+{% if item.value.pubkeys is defined %}
+{%   for user in item.value.pubkeys %}
+{%     if item.value.keyopts is defined %}
+environment="GECOS={{ user }}",{{ item.value.keyopts|join(',') }} {{ lookup('file', user + '.pub') }}
+{%     else %}
+environment="GECOS={{ user }}" {{ lookup('file', user + '.pub') }}
+{%     endif %}
+{%   endfor %}
+{% endif %}

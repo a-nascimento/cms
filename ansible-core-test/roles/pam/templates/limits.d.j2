@@ -1,0 +1,5 @@
+{% if item.limits is defined %}
+{%   for limit in item.limits %}
+{{ limit.domain }}	{{ limit.type }}	{{ limit.item }}	{{ limit.value }}
+{%   endfor %}
+{% endif %}

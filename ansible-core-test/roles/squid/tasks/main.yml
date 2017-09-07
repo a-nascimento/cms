@@ -1,0 +1,30 @@
+---
+- name: yum | squid
+  tags: squid
+  yum:
+    name=squid
+    state=present
+  register: squid_yum
+
+- name: service | squid
+  tags: squid
+  service:
+    name=squid
+    enabled=yes
+    state=started
+  when: squid_yum.rc == 0
+
+- name: template | {{ item }}
+  tags: squid
+  template:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    owner=root
+    group=root
+    mode={{ item.mode }}
+  with_items:
+    - { src: squid.conf.j2, dest: /etc/squid/squid.conf, mode: 640 }
+    - { src: squid.sysconfig.j2, dest: /etc/sysconfig/squid, mode: 644 }
+  notify:
+    - service | squid | restart
+

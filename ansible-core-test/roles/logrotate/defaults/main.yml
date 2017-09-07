@@ -1,0 +1,9 @@
+---
+logrotate:
+  compress: True
+  create: True
+  dateext: True
+  include: /etc/logrotate.d
+  interval: daily
+  weeks: 1
+

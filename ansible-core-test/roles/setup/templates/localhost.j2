@@ -1,0 +1,25 @@
+if [ "$PS1" ]
+then
+    DOM='{{ local_env }}.priv'
+    DOM=$( echo ${DOM%.*} | tr '[:lower:]' '[:upper:]' )
+    bakred='\e[41m'   # Red
+    bakgrn='\e[42m'   # Green
+    bakylw='\e[43m'   # Yellow
+    bakblu='\e[44m'   # Blue
+    bakppl='\e[45m'   # Purple
+
+    case $DOM in
+        PROD )  DOMBGCOLOR=$bakred ;;
+        TOOLS ) DOMBGCOLOR=$bakred ;;
+        CORP )  DOMBGCOLOR=$bakgrn ;;
+        DEV )   DOMBGCOLOR=$bakblu ;;
+        QA )    DOMBGCOLOR=$bakblu ;;
+        LAB )   DOMBGCOLOR=$bakblu ;;
+        * )     DOMBGCOLOR=$bakppl
+                return 1
+                ;;
+    esac
+    PS1="\[${DOMBGCOLOR}\]${DOM}\[\e[m\] [\u@\H \W]\\$ "
+fi
+
+readonly GECOS

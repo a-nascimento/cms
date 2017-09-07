@@ -1,0 +1,28 @@
+---
+- name: yum | postfix
+  yum:
+    name=postfix
+    state=present
+  tags: postfix
+  register: postfix_yum
+
+- name: service | postfix
+  service:
+    name=postfix
+    enabled=yes
+    state=started
+  tags: postfix
+  when: postfix_yum.rc == 0
+
+- name: template | main.cf
+  template:
+    src=main.cf.j2
+    dest=/etc/postfix/main.cf
+    owner=root
+    group=root
+    mode=0644
+  tags: postfix
+  when: postfix_yum.rc == 0
+  notify:
+    - service | postfix | restart
+

@@ -1,0 +1,29 @@
+###############################################################################
+# SERVICES.CFG - SERVICES FOR NAGIOS 3.5.1
+###############################################################################
+
+{% if groups is defined %}
+{%   for group in groups|sort %}
+{%     if group != 'all' and group != 'ungrouped' %}
+{%       if hostvars[groups[group][0]][group] is defined %}
+{%         for service in hostvars[groups[group][0]][group]['monitoring']|sort %}
+define service {
+{%           if hostvars[groups[group][0]][group]['monitoring'][service]['use'] is defined %}
+	use			{{ hostvars[groups[group][0]][group]['monitoring'][service]['use'] }}
+{%           else %}
+	use			ops-service
+{%           endif %}
+	hostgroup_name		{{ group }}
+	service_description	{{ service }}
+{%           if hostvars[groups[group][0]][group]['monitoring'][service]['plugin'] is defined %}
+	check_command		{{ hostvars[groups[group][0]][group]['monitoring'][service]['plugin'] }}!{{ service }}
+{%           else %}
+	check_command		{{ service }}
+{%           endif %}
+}
+
+{%         endfor %}
+{%       endif %}
+{%     endif %}
+{%   endfor %}
+{% endif %}

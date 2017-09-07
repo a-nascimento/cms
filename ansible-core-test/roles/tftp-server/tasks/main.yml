@@ -1,0 +1,41 @@
+---
+- name: yum | {{ item }}
+  tags: tftp-server
+  yum:
+    name={{ item }}
+    state=present
+    update_cache=yes
+  register: tftp_server_yum
+  with_items: [ 'tftp', 'tftp-server' ]
+
+- name: service | xinetd
+  tags: tftp-server
+  service:
+    name=xinetd
+    enabled=yes
+    state=started
+  when: tftp_server_yum|success
+
+- name: file | {{ tftp_server.secure }}
+  tags: tftp-server
+  file:
+    path={{ tftp_server.secure }}
+    owner=root
+    group=root
+    mode=0755
+    state=directory
+
+- name: template | {{ item }}
+  tags: tftp-server
+  template:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    owner=root
+    group=root
+    mode=0644
+  with_items:
+    - { src: tftp.j2, dest: /etc/xinetd.d/tftp }
+  when: tftp_server_yum|success
+  notify:
+    - service | xinetd | restarted
+ 

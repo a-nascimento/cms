@@ -1,0 +1,35 @@
+---
+- name: yum | openssh-server
+  tags: openssh-server
+  yum:
+    name=openssh-server
+    state=present
+  register: openssh_server_yum
+
+- name: service | sshd
+  tags: openssh-server
+  service:
+    name=sshd
+    enabled=yes
+    state=started
+  when: openssh_server_yum.rc == 0
+
+- name: template | sshd_config
+  tags: openssh-server
+  template:
+    src=sshd_config.j2
+    dest=/etc/ssh/sshd_config
+    owner=root
+    group=root
+    mode=0600
+  register: openssh_server_template
+  when: openssh_server_yum.rc == 0
+  notify:
+    - service | openssh-server | restart
+
+- name: meta | flush_handlers
+  tags: openssh-server
+  meta:
+    flush_handlers
+  when: openssh_server_template|changed
+

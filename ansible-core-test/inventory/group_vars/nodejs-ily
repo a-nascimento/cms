@@ -1,0 +1,15 @@
+nodejs-ily:
+  monitoring:
+    check_health_node_ily:
+      command: 'check_http -H localhost -p 3000 -u /livecheck'
+      plugin: check_nrpe
+      use: insights-service
+    check_load_node_ily:
+      command: 'check_load -w 1.5,0.8,0.8 -c 2,1,1 -r'
+      plugin: check_nrpe
+      use: insights-service
+    check_procs_node_ily:
+      command: 'check_procs -c 1: -C node'
+      plugin: check_nrpe
+      use: insights-service
+

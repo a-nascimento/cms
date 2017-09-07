@@ -1,0 +1,11 @@
+---
+- hosts: all:!localhost
+  become: no
+  become_user: root
+  connection: ssh
+  remote_user: root
+
+  roles:
+    - setenv
+    - "{{ role }}"
+

@@ -1,0 +1,72 @@
+###############################################################################
+# CONTACTS.CFG - CONTACT/CONTACTGROUP DEFINITIONS
+###############################################################################
+
+define contact {
+        contact_name                    null
+        alias                           null
+        service_notification_period     null
+        host_notification_period        null
+        service_notification_options    w,u,c,r
+        host_notification_options       d,r
+        service_notification_commands   notify-service-by-email
+        host_notification_commands      notify-host-by-email
+}
+
+{% if nagios_cc is defined %}
+{%   for cc in nagios_cc|sort %}
+define contact {
+	contact_name			{{ cc }}
+	alias				{{ cc }}
+	service_notification_period	24x7
+	host_notification_period	24x7
+	service_notification_options	w,u,c,r
+	host_notification_options	d,r
+	service_notification_commands	notify-service-by-email
+	host_notification_commands	notify-host-by-email
+{%     if nagios_cc[cc]['email'] is defined %}
+	email				{{ nagios_cc[cc]['email'] }}
+{%     else %}
+	email				it_devops@surveysampling.com
+{%     endif %}
+}
+
+{%     if nagios_cc[cc]['pager'] is defined %}
+define contact {
+	contact_name			pagerduty-{{ cc }}
+	alias				pagerduty-{{ cc }}
+	service_notification_period	24x7
+	host_notification_period	24x7
+	service_notification_options	u,c,r
+	host_notification_options	d,r
+	service_notification_commands	notify-service-by-pagerduty
+	host_notification_commands	notify-host-by-pagerduty
+	pager				{{ nagios_cc[cc]['pager'] }}
+}
+{%     endif %}
+
+define contactgroup {
+	contactgroup_name	{{ cc }}
+	alias			{{ cc }}
+{%     if nagios.escalate is defined %}
+{%       if local_env in nagios.escalate %}
+{%         if nagios_cc[cc]['pager'] is defined %}
+	members			{{ cc }},pagerduty-{{ cc }}
+{%         else %}
+	members			{{ cc }}
+{%         endif %}
+{%       else %}
+	members			null
+{%       endif %}
+{%     else %}
+{%       if nagios_cc[cc]['pager'] is defined %}
+	members			{{ cc }},pagerduty-{{ cc }}
+{%       else %}
+	members			{{ cc }}
+{%       endif %}
+{%     endif %}
+}
+
+{%   endfor %}
+{% endif %}
+

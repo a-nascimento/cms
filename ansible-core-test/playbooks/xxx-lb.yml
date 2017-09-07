@@ -1,0 +1,10 @@
+---
+- hosts: ~lb[0-9]+?.*
+  become: no
+  become_user: root
+  connection: ssh
+  remote_user: root
+  roles:
+    - setenv
+    - haproxy
+

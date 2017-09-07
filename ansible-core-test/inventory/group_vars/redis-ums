@@ -1,0 +1,15 @@
+redis-ums:
+  monitoring:
+    check_load_redis_ums:
+      command: 'check_load -w 1.5,0.8,0.8 -c 2,1,1 -r'
+      plugin: check_nrpe
+      use: core-service
+    check_procs_redis_ums:
+      command: 'check_procs -c 1: -C redis-server'
+      plugin: check_nrpe
+      use: core-service
+    check_6379_redis_ums:
+      command: 'check_tcp -p 6379'
+      plugin: check_nrpe
+      use: core-service
+

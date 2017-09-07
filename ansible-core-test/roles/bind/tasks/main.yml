@@ -1,0 +1,49 @@
+---
+- name: yum | {{ item }}
+  tags: bind
+  yum:
+    name={{ item }}
+    state=latest
+  register: bind_yum
+  notify: [ 'service | named | restarted' ]
+  with_items: [ 'bind', 'bind-chroot' ]
+
+- block:
+    - name: yum | ganglia-gmond-bind_xml
+      yum:
+        name=ganglia-gmond-bind_xml
+        state=present
+      notify: [ 'service | gmond | restarted' ]
+    - name: template | {{ item.dst }}
+      template:
+        src={{ item.src }}
+        dest={{ item.dst }}
+        owner=root group=named mode=0640
+      notify: [ 'service | named | restarted' ]
+      with_items:
+        - { src: named.conf.j2, dst: /etc/named.conf }
+        - { src: rndc.key.j2, dst: /etc/rndc.key }
+    - name: git | bind-zones
+      git: 
+        repo=git@github.com:usamp-ops/bind-zones.git
+        dest=/var/named/bind-zones
+        accept_hostkey=yes
+        force=yes
+        update=yes
+      when: named.true_master == inventory_hostname 
+    - name: file | bind-zones
+      file:
+        path=/var/named/bind-zones
+        owner=named
+        group=named
+        mode=0755
+        state=directory
+      when: named.true_master != inventory_hostname
+    - name: service | named
+      service:
+        name=named
+        enabled=yes
+        state=started
+  tags: bind
+  when: bind_yum|success
+

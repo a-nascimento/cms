@@ -1,0 +1,31 @@
+---
+- name: yum | sudo
+  yum:
+    name=sudo
+    state=present
+  tags: sudo
+  register: yum_sudo
+
+- name: template | sudoers
+  template:
+    src=sudoers.j2
+    dest=/etc/sudoers
+    owner=root
+    group=root
+    mode=0440
+  tags: sudo
+  when: yum_sudo.rc == 0
+
+- name: template | sudoers.d
+  template:
+    src=sudoers.d.j2
+    dest=/etc/sudoers.d/{{ item.name }}
+    owner=root
+    group=root
+    mode=0440
+  tags: sudo
+  with_items: sudoers
+  when: 
+    yum_sudo.rc == 0 and
+    sudoers is defined
+

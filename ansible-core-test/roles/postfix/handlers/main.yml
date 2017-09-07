@@ -1,0 +1,7 @@
+---
+- name: service | postfix | restart
+  service:
+    name=postfix
+    state=restarted
+  tags: postfix
+

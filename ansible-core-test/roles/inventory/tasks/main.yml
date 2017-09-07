@@ -1,0 +1,28 @@
+---
+- name: yum | ansible-cmdb-refresh
+  tags: inventory
+  yum:
+    name=ansible-cmdb-refresh
+    state=latest
+    update_cache=yes
+  register: ansible_cmdb_refresh_yum
+
+- block:
+    - name: file | inventory
+      file:
+        path=/mnt/vdc/inventory
+        owner=root
+        group=root
+        mode=0755
+        state=directory
+    - name: template | inventory.conf
+      template:
+        src=inventory.conf.j2
+        dest=/etc/httpd/conf.d/inventory.conf
+        owner=root
+        group=root
+        mode=0644
+      notify: [ 'service | httpd | restarted' ]
+  tags: inventory
+  when: ansible_cmdb_refresh_yum|success
+

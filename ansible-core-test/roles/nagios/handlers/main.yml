@@ -1,0 +1,7 @@
+---
+- name: service | nagios | restarted
+  tags: nagios
+  service:
+    name=nagios
+    state=restarted
+

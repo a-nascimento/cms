@@ -1,0 +1,35 @@
+---
+- name: yum | iptables
+  tags: iptables
+  yum:
+    name=iptables
+    state=present
+  register: iptables_yum
+
+- name: service | iptables
+  tags: iptables
+  service:
+    name=iptables
+    enabled=no
+    state=stopped
+  when: iptables_yum.rc == 0
+
+- name: template | iptables.sysconfig
+  tags: iptables
+  template:
+    src=iptables.sysconfig.j2
+    dest=/etc/sysconfig/iptables
+    owner=root
+    group=root
+    mode=0600
+  register: iptables_template
+  when: iptables_yum.rc == 0
+  notify:
+    - service | iptables | restart
+
+- name: meta | flush_handlers
+  tags: iptables
+  meta:
+    flush_handlers
+  when: iptables_template|changed
+

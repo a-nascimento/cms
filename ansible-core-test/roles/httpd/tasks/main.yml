@@ -1,0 +1,32 @@
+---
+- name: yum | httpd
+  tags: httpd
+  yum:
+    name=httpd
+    state=present
+  register: httpd_yum
+
+- name: service | httpd
+  tags: httpd
+  service:
+    name=httpd
+    enabled=yes
+    state=started
+  when: httpd_yum.rc == 0
+
+- name: template | {{ item }}
+  tags: httpd
+  template:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    owner=root
+    group=root
+    mode=0644
+  with_items:
+    - { src: httpd.conf.j2, dest: /etc/httpd/conf/httpd.conf }
+    - { src: httpd.sysconfig.j2, dest: /etc/sysconfig/httpd }
+    - { src: noindex.html.j2, dest: /var/www/error/noindex.html }
+  when: httpd_yum.rc == 0
+  notify:
+    - service | httpd | restarted
+

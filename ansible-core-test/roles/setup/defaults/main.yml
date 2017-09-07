@@ -1,0 +1,23 @@
+---
+setup:
+  aliases:
+    default:
+      root: it_devops@surveysampling.com
+      appuser: sample.team@instant.ly 
+      dbuser: yang.liu@instant.ly
+      debug: sample.team@instant.ly
+      readonly: /dev/null
+    ily:
+      appuser: insights.dev@instant.ly
+      debug: insights.dev@instant.ly
+    mobile:
+      appuser: mobile-dev@instant.ly
+      debug: mobile-dev@instant.ly
+    tpm:
+      appuser: william.russell@instant.ly
+      debug: william.russell@instant.ly
+    utl:
+      appuser: it_devops@surveysampling.com
+      debug: it_devops@surveysampling.com
+  timezone: PST8PDT
+

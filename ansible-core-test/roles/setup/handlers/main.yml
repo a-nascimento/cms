@@ -1,0 +1,6 @@
+---
+- name: command | newaliases
+  command: >
+    newaliases
+  tags: setup
+

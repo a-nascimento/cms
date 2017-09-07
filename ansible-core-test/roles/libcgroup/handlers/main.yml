@@ -1,0 +1,8 @@
+---
+- name: service | libcgroup | restarted
+  tags: libcgroup
+  service:
+    name={{ item }}
+    state=restarted
+  with_items: [ 'cgconfig', 'cgred' ]
+

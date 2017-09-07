@@ -1,0 +1,9 @@
+---
+sudoers:
+  - name: haproxy
+    user: appuser
+    commands:
+      - /etc/init.d/haproxy *
+      - /usr/sbin/hatable *
+      - /usr/sbin/hatop *
+

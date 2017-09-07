@@ -1,0 +1,17 @@
+---
+- name: yum | ansible
+  tags: ansible
+  yum:
+    name=ansible
+    state=latest
+  register: ansible_yum
+
+- name: file | /etc/ansible
+  tags: ansible
+  file:
+    path=/etc/ansible
+    owner=root
+    group=root
+    mode=0700
+  when: ansible_yum|success
+ 

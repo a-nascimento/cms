@@ -1,0 +1,97 @@
+//
+// named.conf
+//
+// Provided by Red Hat bind package to configure the ISC BIND named(8) DNS
+// server as a caching only nameserver (as a localhost DNS resolver only).
+//
+// See /usr/share/doc/bind*/sample/ for example named configuration files.
+//
+
+acl "named_trusted_networks" {
+{% if named.acls is defined %}
+{%   for acl in named.acls %}
+        {{ acl }};
+{%   endfor %}
+{% endif %}
+};
+
+options {
+	listen-on port 53 { 127.0.0.1; {{ ansible_default_ipv4.address }}; };
+	listen-on-v6 port 53 { ::1; };
+	directory 	"/var/named";
+	dump-file 	"/var/named/data/cache_dump.db";
+        statistics-file "/var/named/data/named_stats.txt";
+        memstatistics-file "/var/named/data/named_mem_stats.txt";
+	allow-query     { named_trusted_networks; };
+	recursion yes;
+{% if named.true_master == ansible_fqdn %}
+{%   if named.also_notify is defined %}
+	also-notify {
+{%-    for notify in named.also_notify %} 
+		{{ notify }};
+{%-    endfor %}
+
+	};
+{%   endif %}
+{% endif %}
+
+{% if named.dnssec_enable is defined %}
+	dnssec-enable yes;
+	dnssec-validation yes;
+	dnssec-lookaside auto;
+{% endif %}
+
+	/* Path to ISC DLV key */
+	bindkeys-file "/etc/named.iscdlv.key";
+
+	managed-keys-directory "/var/named/dynamic";
+};
+
+logging {
+        channel default_debug {
+                file "data/named.run";
+                severity dynamic;
+        };
+};
+
+statistics-channels {
+        inet 127.0.0.1 port 8053 allow { 127.0.0.1; };
+};
+
+zone "." IN {
+	type hint;
+	file "named.ca";
+};
+
+{% if named.zones is defined %}
+{%   for zone in named.zones %}
+zone "{{ zone }}" IN {
+{%     if named.true_master == ansible_fqdn %}
+	type master;
+	notify yes;
+{%     else %}
+	type slave;
+{%     endif %}
+	file "/var/named/bind-zones/{{ zone }}";
+	allow-transfer { named_trusted_networks; };
+	allow-query { named_trusted_networks; };
+{%     if named.true_master != ansible_fqdn %}
+	masters { {{ named.masters | join('; ') }}; };
+{%     endif %}
+}; 
+
+{%   endfor %}
+{% endif %}
+
+{% if named.forward is defined %}
+{%   for forward in named.forward %}
+zone "{{ forward.split(':')[0] }}" IN {
+	type forward;
+	forwarders { {{ forward.split(':')[1] }}; };
+};
+
+{%   endfor %}
+{% endif %}
+
+include "/etc/named.rfc1912.zones";
+include "/etc/named.root.key";

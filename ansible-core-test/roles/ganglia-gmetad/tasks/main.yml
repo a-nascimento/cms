@@ -1,0 +1,77 @@
+---
+- name: yum | {{ item }}
+  tags: ganglia-gmetad
+  yum:
+    name={{ item }}
+    state=present
+  register: ganglia_gmetad_yum
+  with_items: [ 'ganglia-gmetad', 'ganglia-web' ]
+
+- name: set_fact | {{ item }}
+  tags: ganglia-gmetad
+  set_fact:
+    ganglia_device: "{{ item }}"
+  with_items: [ 'vdc', 'xvdb' ]
+  when:
+    ganglia_gmetad_yum.rc == 0 and
+    ansible_devices.{{ item }} is defined
+
+- name: template | {{ item }}
+  tags: ganglia-gmetad
+  template:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    owner=root
+    group=root
+    mode=0644
+  with_items:
+    - { src: conf_default.php.j2, dest: /usr/share/ganglia/conf_default.php }
+    - { src: ganglia.conf.j2, dest: /etc/httpd/conf.d/ganglia.conf }
+  when: ganglia_gmetad_yum.rc == 0
+  notify:
+    - service | httpd | restarted
+
+- name: template | gmetad.conf
+  tags: ganglia-gmetad
+  template:
+    src=gmetad.conf.j2
+    dest=/etc/ganglia/gmetad.conf
+    owner=root
+    group=root
+    mode=0644
+  when: ganglia_gmetad_yum.rc == 0
+  notify:
+    - service | gmetad | restarted
+
+- name: file | {{ item }} | directory
+  tags: ganglia-gmetad
+  file:
+    path={{ item }}
+    owner=ganglia
+    group=ganglia
+    mode=0755
+    state=directory
+  with_items:
+    - /mnt/{{ ganglia_device }}/ganglia
+    - /mnt/{{ ganglia_device }}/ganglia/rrds
+  when: ganglia_gmetad_yum.rc == 0
+
+- name: file | rrds | symlink
+  tags: ganglia-gmetad
+  file:
+    src=/mnt/{{ ganglia_device }}/ganglia/rrds
+    dest=/var/lib/ganglia/rrds
+    owner=ganglia
+    group=ganglia
+    state=link
+    force=yes
+  when: ganglia_gmetad_yum.rc == 0
+
+- name: service | ganglia-gmetad
+  tags: ganglia-gmetad
+  service:
+    name=gmetad
+    enabled=yes
+    state=started
+  when: ganglia_gmetad_yum.rc == 0
+

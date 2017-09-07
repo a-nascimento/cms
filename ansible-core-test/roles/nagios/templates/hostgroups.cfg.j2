@@ -1,0 +1,16 @@
+###############################################################################
+# HOSTGROUPS.CFG - HOSTGROUPS FOR NAGIOS 3.5.1
+###############################################################################
+
+{% if groups is defined %}
+{%   for group in groups|sort %}
+{%     if group != 'all' and group != 'ungrouped' %}
+define hostgroup {
+        hostgroup_name          {{ group }}
+        alias                   {{ group }}
+        members                 {{ groups[group]|join(',') }}
+}
+
+{%     endif %}
+{%   endfor %}
+{% endif %}

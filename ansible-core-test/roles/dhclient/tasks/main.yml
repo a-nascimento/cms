@@ -1,0 +1,30 @@
+---
+- name: yum | dhclient
+  tags: dhclient
+  yum:
+    name=dhclient
+    state=present
+  register: dhclient_yum
+
+- name: template | dhclient-{{ item }}.conf
+  tags: dhclient
+  template:
+    src=dhclient-interface.conf.j2
+    dest=/etc/dhcp/dhclient-{{ item }}.conf
+    owner=root
+    group=root
+    mode=0644
+  register: dhclient_template
+  with_items: dhclient.interfaces
+  when:
+    dhclient_yum.rc == 0 and
+    dhclient.interfaces is defined
+  notify:
+    - service | network | restarted
+
+- name: meta | flush_handlers
+  tags: dhclient
+  meta:
+    flush_handlers
+  when: dhclient_template|changed
+

@@ -1,0 +1,18 @@
+---
+pam_limits:
+  - name: internal
+    order: 99
+    limits:
+      - domain: appuser
+        type: soft
+        item: nofile
+        value: 8192
+      - domain: appuser
+        type: hard
+        item: nofile
+        value: 10240
+      - domain: appuser
+        type: soft
+        item: nproc
+        value: 2048
+

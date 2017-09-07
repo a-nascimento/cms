@@ -1,0 +1,25 @@
+---
+dhclient:
+  default: phx304
+  domain_name:
+    - "{{ local_domain }}"
+    - "{{ local_search }}"
+  domain_name_servers:
+    phx304: [ '10.1.104.2', '10.1.104.3' ]
+    phx306: [ '10.1.106.2', '10.1.106.3' ]
+    phx308: [ '10.1.108.2', '10.1.108.3' ]
+    phx309: [ '10.1.109.2', '10.1.109.3' ]
+    phx312: [ '10.1.112.2', '10.1.112.3' ]
+    useast1: [ '10.40.70.4', '10.40.70.5' ]
+  interfaces: [ 'eth0' ]
+  request:
+    - broadcast-address
+    - domain-name
+    - domain-name-servers
+    - domain-search
+    - host-name 
+    - routers
+    - subnet-mask
+    - time-offset
+  require: [ 'subnet-mask' ]
+

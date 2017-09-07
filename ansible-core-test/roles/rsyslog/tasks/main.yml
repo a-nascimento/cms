@@ -1,0 +1,69 @@
+---
+- name: yum | rsyslog
+  tags: rsyslog
+  yum:
+    name=rsyslog
+    state=present
+  register: rsyslog_yum
+
+- name: file | {{ item.0.device }} | directory
+  tags: rsyslog
+  file:
+    path=/mnt/{{ item.0.device }}/syslog
+    state=directory
+    owner=root
+    group=root
+    mode=0755
+  with_subelements:
+    - rsyslog_dirs
+    - dir
+  when:
+    rsyslog_server == local_class and
+    ansible_devices.{{ item.0.device }} is defined
+
+- name: file | {{ item.0.device }} | link
+  tags: rsyslog
+  file:
+    src=/mnt/{{ item.0.device }}/syslog
+    dest=/var/log/internal
+    state=link
+    owner=root
+    group=root
+    mode=0755
+  with_subelements:
+    - rsyslog_dirs
+    - dir
+  when:
+    rsyslog_server == local_class and
+    ansible_devices.{{ item.0.device }} is defined
+
+- name: service | rsyslog
+  tags: rsyslog
+  service:
+    name=rsyslog
+    enabled=yes
+    state=started
+  when: rsyslog_yum.rc == 0
+
+- name: template | {{ item }}
+  tags: rsyslog
+  template:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    owner=root
+    group=root
+    mode=0644
+  with_items:
+    - { src: rsyslog.conf.j2, dest: /etc/rsyslog.conf }
+    - { src: rsyslog.logrotate.j2, dest: /etc/logrotate.d/syslog }
+  when: rsyslog_yum.rc == 0
+  notify:
+    - service | rsyslog | restart
+
+- name: yum | syslog-rotate
+  tags: rsyslog
+  yum:
+    name=syslog-rotate
+    state=latest
+  when: rsyslog_server == local_class
+

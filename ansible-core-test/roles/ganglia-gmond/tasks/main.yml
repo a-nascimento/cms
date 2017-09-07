@@ -1,0 +1,28 @@
+---
+- name: yum | {{ item }}
+  tags: ganglia-gmond
+  yum:
+    name={{ item }}
+    state=present
+  register: ganglia_gmond_yum
+  with_items: [ 'ganglia-gmond', 'ganglia-gmond-python' ]
+
+- name: template | gmond.conf
+  tags: ganglia-gmond
+  template:
+    src=gmond.conf.j2
+    dest=/etc/ganglia/gmond.conf
+    owner=root
+    group=root
+    mode=0644
+  notify: [ 'service | gmond | restarted' ]
+  when: ganglia_gmond_yum|success
+
+- name: service | ganglia-gmond
+  tags: ganglia-gmond
+  service:
+    name=gmond
+    enabled=yes
+    state=started
+  when: ganglia_gmond_yum|success
+

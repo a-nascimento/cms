@@ -1,0 +1,38 @@
+---
+- name: set_fact | local_fqdn
+  tags: always
+  set_fact:
+    local_fqdn: "{{ inventory_hostname }}"
+  when: inventory_hostname != 'localhost'
+
+- name: set_fact | local_fqdn
+  tags: always
+  set_fact:
+    local_fqdn: "{{ ansible_fqdn }}"
+  when: inventory_hostname == 'localhost'
+
+- name: set_fact | local | split
+  tags: always
+  set_fact:
+    local_class: "{{ local_fqdn.split('.')[0] | regex_replace('[0-9]+?', '') }}"
+    local_instance: "{{ local_fqdn.split('.')[0] | regex_replace('[a-zA-Z]+?', '') }}"
+    local_product: "{{ local_fqdn.split('.')[1] }}"
+    local_locality: "{{ local_fqdn.split('.')[2] | regex_replace('[0-9]+?', '') }}"
+    local_vlan: "{{ local_fqdn.split('.')[2] | regex_replace('[a-zA-Z]+?', '') }}"
+    local_env: "{{ local_fqdn.split('.')[3] }}"
+    local_tld: "{{ local_fqdn.split('.')[4] }}"
+
+- name: set_fact | local | join
+  tags: always
+  set_fact:
+    local_cluster: "{{ local_locality + local_vlan }}"
+    local_domain: "{{ local_env }}.{{ local_tld }}"
+    local_search: "{{ local_product }}.{{ local_locality + local_vlan }}.{{ local_env }}.{{ local_tld }}"
+
+- name: yum | update_cache
+  tags: always
+  yum:
+    name=yum
+    state=latest
+    update_cache=yes  
+

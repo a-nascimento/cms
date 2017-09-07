@@ -1,0 +1,30 @@
+solidfire-node:
+  monitoring:
+    check_snmp_load1:
+      command: False
+      use: ops-service
+    check_snmp_load5:
+      command: False
+      use: ops-service
+    check_snmp_load15:
+      command: False
+      use: ops-service
+    check_snmp_cpu_user:
+      command: False
+      use: ops-service
+    check_snmp_cpu_system:
+      command: False
+      use: ops-service
+    check_snmp_cpu_idle:
+      command: False
+      use: ops-service
+    check_snmp_sysdescr:
+      command: False
+      use: ops-service
+    check_snmp_swap_free:
+      command: False
+      use: ops-service
+    check_snmp_memory_free:
+      command: False
+      use: ops-service
+

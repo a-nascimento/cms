@@ -1,0 +1,40 @@
+---
+- name: yum | cronie
+  tags: cronie
+  yum:
+    name=cronie
+    state=present
+  register: cronie_yum
+
+- name: service | crond
+  tags: cronie
+  service:
+    name=crond
+    enabled=yes
+    state=started
+  when: cronie_yum.rc == 0
+
+- name: template | {{ item.dest }}
+  tags: cronie
+  template:
+    src=cronie.j2
+    dest={{ item.dest }}
+    owner=root
+    group=root
+    mode=0644
+  with_items: cronie_jobs
+  when: cronie_yum.rc == 0
+  notify:
+    - service | crond | restart
+
+- name: template | cron.deny
+  tags: cronie
+  template:
+    src=cron.deny.j2 
+    dest=/etc/cron.deny
+    owner=root
+    group=root
+    mode=0644
+  with_items: cronie_deny
+  when: cronie_yum.rc == 0
+

@@ -1,0 +1,59 @@
+---
+- name: yum | setup
+  tags: setup
+  yum:
+    name=setup
+    state=present
+  register: setup_yum
+
+- name: hostname | {{ inventory_hostname }}
+  tags: setup
+  hostname:
+    name={{ inventory_hostname }}
+  when: inventory_hostname != 'localhost'
+
+- name: hostname | {{ ansible_fqdn }}
+  tags: setup
+  hostname:
+    name={{ ansible_fqdn }}
+  when: inventory_hostname == 'localhost'
+
+- name: file | localtime
+  tags: setup
+  file:
+    src=/usr/share/zoneinfo/{{ setup.timezone }}
+    dest=/etc/localtime
+    owner=root
+    group=root
+    state=link
+    force=yes
+  when: setup.timezone is defined
+
+- name: template | aliases
+  tags: setup
+  template:
+    src=aliases.j2
+    dest=/etc/aliases
+    owner=root
+    group=root
+    mode=0644
+  when: setup_yum.rc == 0
+  notify:
+    - command | newaliases
+
+- name: template | {{ item.src }}
+  tags: setup
+  template:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    owner=root
+    group=root
+    mode=0644
+  with_items:
+    - { src: clock.j2, dest: /etc/sysconfig/clock }
+    - { src: hostname.j2, dest: /etc/hostname }
+    - { src: hosts.j2, dest: /etc/hosts }
+    - { src: localhost.j2, dest: /etc/profile.d/localhost.sh }
+    - { src: motd.j2, dest: /etc/motd }
+  when: setup_yum.rc == 0
+
