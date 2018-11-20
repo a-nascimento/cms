@@ -1,0 +1,3 @@
+---
+- debug: 
+    msg: "{{ ansible_virtualization_type }}"
