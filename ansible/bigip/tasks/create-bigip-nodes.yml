@@ -1,0 +1,37 @@
+---
+- name: add node
+  bigip_node:
+    name: andrew-test01
+    host: andrew-test01
+    partition: Common
+    provider:
+      server: "{{ f5.primary }}"
+      user: anascimento
+      password: crunch&slang=entire
+      validate_certs: no
+  with_items:
+    - "{{ server_list }}"
+
+# - debug:
+#    msg: "This is my var: {{ server_list }}"
+
+# - name: "add node {{ item }}"
+#   bigip_node:
+#     address: "{{ item }}"
+#     name: "{{ item }}"
+#     fqdn_auto_populate: yes
+#     fqdn_up_interval: 3600
+#     monitors:
+#       - icmp
+#     fqdn_address_type: ipv4
+#     fqdn: "{{ item }}"
+#     state: "{{ server_state }}"
+#     provider:
+#       user: admin
+#       password: c0wboys-Fa1l
+#       server: "{{ f5.primary }}"
+#       server_port: "{{ bigip_server_port }}"
+#       transport: cli
+#     fqdn_down_interval: 5
+#   with_items:
+#     - "{{ server_list }}"

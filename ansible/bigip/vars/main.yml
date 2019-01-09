@@ -1,0 +1,9 @@
+---
+user: anascimento
+password: 
+f5:
+  primary: tenrsnbigip01.researchnow.com
+  secondary: tenrsnbigip02.researchnow.com
+server_state: present
+bigip_server_port: 443
+server_list: "{{ groups['dev_csl'] }}"

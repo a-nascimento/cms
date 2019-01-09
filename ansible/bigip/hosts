@@ -1,0 +1,15 @@
+[all]
+upladevcsl[01:03]v.researchnow.com
+upladevcsd[01:02]v.researchnow.com
+
+[dev_csl]
+upladevcsl[01:03]v.researchnow.com
+
+[dev_csd]
+upladevcsd[01:02]v.researchnow.com
+
+[dev_f5_primary]
+tenrsnbigip01.researchnow.com
+
+[dev_f5_secondary]
+tenrsnbigip02.researchnow.com
