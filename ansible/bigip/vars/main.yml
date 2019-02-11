@@ -1,6 +1,6 @@
 ---
-user: xxxxx
-password: xxxxx
+user: ####
+password: ####
 f5:
   tru:
     qa:

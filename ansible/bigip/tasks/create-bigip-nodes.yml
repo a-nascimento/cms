@@ -21,8 +21,7 @@
       server: "{{ f5.tru.qa.primary }}"
       user: "{{ user }}"
       password: "{{ password }}"
-      validate_certs: no
-   
+      validate_certs: no   
 
 # - debug:
 #    msg: "This is my var: {{ server_list }}"
